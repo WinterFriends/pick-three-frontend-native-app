@@ -13,6 +13,10 @@ class Goal {
         this._icon = icon;
     }
 
+    getId() {
+        return this._id;
+    }
+
     getName() {
         return this._name;
     }
