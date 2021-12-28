@@ -4,8 +4,17 @@ import SettingElement from "../components/SettingElement";
 import StatusBar from "../components/StatusBar";
 
 class SettingScreen extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
     onPressUpdateProfile() {
         console.log("SettingScreen.onPressUpdateProfile");
+        let unsubscribe = this.props.navigation.addListener('focus', () => {
+            console.log("SettingScreen.onFocus: onPressUpdateProfile");
+            unsubscribe();
+        });
+        this.props.navigation.navigate("EditProfileScreen", { goBackAble: true });
     }
 
     onPressLogOut() {
