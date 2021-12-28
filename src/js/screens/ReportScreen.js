@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-class HistoryScreen extends React.Component {
+class ReportScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>HistoryScreen</Text>
+                <Text>ReportScreen</Text>
             </View>
         );
     }
@@ -19,4 +19,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default HistoryScreen;
+export default ReportScreen;
