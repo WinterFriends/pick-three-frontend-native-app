@@ -1,18 +1,17 @@
-import Goal from "./Goal";
 import DateUtils from "../utils/DateUtils";
 
 class UserGoal {
     /**
      * 사용자 목표에 대한 클래스 반환
      * @param {string} date
-     * @param {Goal} goal
+     * @param {int} goalId
      * @param {boolean} success
      * @param {string} diary
      */
-    constructor(date, goal, success, diary) {
+    constructor(date, goalId, success, diary) {
         this._dateString = date;
         this._date = DateUtils.formattedStringToDate(this._dateString);
-        this._goal = goal;
+        this._goalId = goalId;
         this._success = success;
         this._diary = diary;
     }
@@ -21,8 +20,8 @@ class UserGoal {
         return this._dateString;
     }
 
-    getGoal() {
-        return this._goal.clone();
+    getGoalId() {
+        return this._goalId;
     }
 
     getSuccess() {
@@ -44,7 +43,7 @@ class UserGoal {
     toJson() {
         let json = {
             date: this._dateString,
-            goal: this._goal.toJson(),
+            goalId: this._goalId,
             success: this._success,
             diary: this._diary
         }
@@ -53,10 +52,9 @@ class UserGoal {
     }
 
     static fromJson(json) {
-        let goal = Goal.fromJson(json.goal);
         let userGoal = new UserGoal(
             json.date,
-            goal,
+            json.goalId,
             json.success,
             json.diary
         )
@@ -67,7 +65,7 @@ class UserGoal {
     clone() {
         let clone = new UserGoal(
             this._dateString,
-            this._goal.clone(),
+            this._goalId,
             this._success,
             this._diary
         )
