@@ -104,7 +104,7 @@ class ReportScreen extends React.Component {
                                             <View style={{
                                                 width: 20,
                                                 bottom: 0,
-                                                minHeight: `${value["select"] / maximum * 100}%`,
+                                                height: `${value["select"] / maximum * 100}%`,
                                                 backgroundColor: "grey",
                                                 borderTopRightRadius: 5,
                                                 borderTopLeftRadius: 5,
@@ -113,7 +113,7 @@ class ReportScreen extends React.Component {
                                                 position: "absolute",
                                                 width: 20,
                                                 bottom: 0,
-                                                minHeight: `${value["success"] / maximum * 100}%`,
+                                                height: `${value["success"] / maximum * 100}%`,
                                                 backgroundColor: value["color"]
                                             }}></View>
                                         </View>
