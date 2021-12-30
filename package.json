@@ -23,11 +23,22 @@
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
     "react-native-web": "0.17.1",
-    "react-navigation-tabs": "^2.11.1",
-    "react-native-gesture-handler": "~2.1.0"
+    "react-native-webview": "11.15.0",
+    "react-navigation-tabs": "^2.11.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
   },
-  "private": true
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wintyio/pick-three-frontend-native-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wintyio/pick-three-frontend-native-app/issues"
+  },
+  "homepage": "https://github.com/wintyio/pick-three-frontend-native-app#readme",
+  "description": ""
 }
