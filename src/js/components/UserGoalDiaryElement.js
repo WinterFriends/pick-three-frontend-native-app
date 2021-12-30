@@ -9,7 +9,7 @@ class UserGoalDiaryElement extends React.Component {
         console.log("UserGoalDiaryElement.constructor: ", props);
         super(props);
         this.userGoal = props.userGoal;
-        this.goal = this.userGoal.getGoal();
+        this.goal = props.goal;
         this.state = {
             text: (!this.userGoal.getDiary() || this.userGoal.getDiary().length === 0) ? "" : this.userGoal.getDiary()
         }

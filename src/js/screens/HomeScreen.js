@@ -5,23 +5,24 @@ import Goal from "../common/Goal";
 import UserGoal from "../common/UserGoal";
 import UserGoalListElement from "../components/UserGoalListElement";
 import StatusBar from "../components/StatusBar.js"
+import GoalManager from "../managers/GoalManager";
 
 let userGoalList = [
     new UserGoal(
         '2021-12-22',
-        new Goal(1, "일", "일 열심히!", "일 아이콘"),
+        1,
         false,
         "열심히 일을 했다..?"
     ),
     new UserGoal(
         '2021-12-22',
-        new Goal(2, "건강", "건강 열심히!", "건강 아이콘"),
+        2,
         false,
         "열심히 건강을 했다..?"
     ),
     new UserGoal(
         '2021-12-22',
-        new Goal(3, "가족", "가족 열심히!", "가족 아이콘"),
+        3,
         false,
         "열심히 가족을 했다..?"
     ),
@@ -49,19 +50,19 @@ class HomeScreen extends React.Component {
             userGoalList: [
                 new UserGoal(
                     '2021-12-22',
-                    new Goal(1, "일1", "일1 열심히!", "일 아이콘"),
+                    1,
                     false,
                     "열심히 일을 했다..?"
                 ),
                 new UserGoal(
                     '2021-12-22',
-                    new Goal(2, "건강1", "건강1 열심히!", "건강 아이콘"),
+                    2,
                     false,
                     "열심히 건강을 했다..?"
                 ),
                 new UserGoal(
                     '2021-12-22',
-                    new Goal(3, "가족1", "가족1 열심히!", "가족 아이콘"),
+                    3,
                     false,
                     "열심히 가족을 했다..?"
                 ),
@@ -70,7 +71,8 @@ class HomeScreen extends React.Component {
     }
 
     changeUserGoalSuccess(userGoal) {
-        console.log(`MainPage.ChangeUserGoalSuccess: ${userGoal.getSuccess()} (${userGoal.getGoal().getName()})`);
+        let goal = GoalManager.getGoalById(userGoal.getGoalId());
+        console.log(`MainPage.ChangeUserGoalSuccess: ${userGoal.getSuccess()} (${goal.getName()})`);
     }
 
     render() {
@@ -98,7 +100,12 @@ class HomeScreen extends React.Component {
                 <ScrollView style={styles.userGoalList} contentContainerStyle={{ padding: 30 }}>
                     {
                         this.state.userGoalList.map((userGoal, i) =>
-                            <UserGoalListElement userGoal={userGoal} key={this.userGoalListIndex++} changeUserGoalSuccess={this.changeUserGoalSuccess.bind(this)} />
+                            <UserGoalListElement
+                                key={this.userGoalListIndex++}
+                                userGoal={userGoal}
+                                goal={GoalManager.getGoalById(userGoal.getGoalId())}
+                                changeUserGoalSuccess={this.changeUserGoalSuccess.bind(this)}
+                            />
                         )
                     }
                 </ScrollView>

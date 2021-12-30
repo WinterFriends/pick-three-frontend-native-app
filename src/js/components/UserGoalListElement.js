@@ -6,6 +6,7 @@ class UserGoalListElement extends React.Component {
         console.log("UserGoalListElement.constructor: ", props);
         super(props);
         this.userGoal = props.userGoal;
+        this.goal = props.goal;
         this.state = {
             success: this.userGoal.getSuccess()
         }
@@ -24,9 +25,9 @@ class UserGoalListElement extends React.Component {
     render() {
         return (
             <TouchableOpacity style={styles.container} onPress={this.onPress.bind(this)}>
-                <View style={styles.goalIcon}><Text>{this.userGoal.getGoal().getIcon()}</Text></View>
+                <View style={styles.goalIcon}><Text>{this.goal.getIcon()}</Text></View>
                 <View style={styles.goalContent}>
-                    <Text style={styles.goalName}>{this.userGoal.getGoal().getName()}</Text>
+                    <Text style={styles.goalName}>{this.goal.getName()}</Text>
                     <Text style={styles.goalDiary}>{this.userGoal.getDiary()}</Text>
                 </View>
                 <Text style={styles.goalSuccess}>{this.userGoal.getSuccess() ? "S" : "F"}</Text>

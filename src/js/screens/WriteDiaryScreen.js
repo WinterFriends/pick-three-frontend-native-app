@@ -3,23 +3,24 @@ import { View, Text, Button, ScrollView, TouchableOpacity, StyleSheet, Alert } f
 import Goal from "../common/Goal";
 import UserGoal from "../common/UserGoal";
 import UserGoalDiaryElement from "../components/UserGoalDiaryElement";
+import GoalManager from "../managers/GoalManager";
 
 let userGoalList = [
     new UserGoal(
         '2021-12-22',
-        new Goal(1, "일", "일 열심히!", "일 아이콘"),
+        1,
         false,
         "열심히 일을 했다..?"
     ),
     new UserGoal(
         '2021-12-22',
-        new Goal(2, "건강", "건강 열심히!", "건강 아이콘"),
+        2,
         false,
         "열심히 건강을 했다..?"
     ),
     new UserGoal(
         '2021-12-22',
-        new Goal(3, "가족", "가족 열심히!", "가족 아이콘"),
+        3,
         false,
         "열심히 가족을 했다..?"
     ),
@@ -77,7 +78,11 @@ class WriteDiaryScreen extends React.Component {
                 <ScrollView style={styles.scrollView} contentContainerStyle={{ padding: 20 }}>
                     {
                         this.userGoalList.map(userGoal => {
-                            return <UserGoalDiaryElement userGoal={userGoal} key={this.userGoalIndex++} />;
+                            return <UserGoalDiaryElement
+                                key={this.userGoalIndex++}
+                                userGoal={userGoal}
+                                goal={GoalManager.getGoalById(userGoal.getGoalId())}
+                            />;
                         })
                     }
                 </ScrollView>
