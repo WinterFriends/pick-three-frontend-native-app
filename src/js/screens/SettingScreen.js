@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import SettingElement from "../components/SettingElement";
 import StatusBar from "../components/StatusBar";
+import AccountManager from "../managers/AccountManager";
 
 class SettingScreen extends React.Component {
     constructor(props) {
@@ -19,6 +20,8 @@ class SettingScreen extends React.Component {
 
     onPressLogOut() {
         console.log("SettingScreen.onPressLogOut");
+        AccountManager.logout();
+        this.props.navigation.replace("LoginScreen");
     }
 
     onPressDeleteAccount() {
@@ -31,7 +34,7 @@ class SettingScreen extends React.Component {
                 <Text>Setting</Text>
 
                 <View style={styles.profileContainer}>
-                    <Text><Text>유천</Text>님</Text>
+                    <Text><Text>{AccountManager.getUserName()}</Text>님</Text>
                     <TouchableOpacity onPress={this.onPressUpdateProfile.bind(this)}><Text>수정</Text></TouchableOpacity>
                 </View>
 
