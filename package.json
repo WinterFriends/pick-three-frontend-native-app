@@ -9,10 +9,12 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-google-signin/google-signin": "^7.0.4",
     "@react-navigation/bottom-tabs": "^6.0.9",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
     "expo": "~44.0.0",
+    "expo-splash-screen": "~0.14.1",
     "expo-status-bar": "~1.2.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -23,8 +25,7 @@
     "react-native-screens": "~3.10.1",
     "react-native-web": "0.17.1",
     "react-native-webview": "11.15.0",
-    "react-navigation-tabs": "^2.11.1",
-    "expo-splash-screen": "~0.14.1"
+    "react-navigation-tabs": "^2.11.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
