@@ -57,12 +57,12 @@ class AccountManager {
         return this._tokenSet;
     }
 
-    static getAccessKey() {
+    static getAccessToken() {
         if (!this._isLogedin) return null;
         return this.getTokenSet()["access"];
     }
 
-    static getRefreshKey() {
+    static getRefreshToken() {
         if (!this._isLogedin) return null;
         return this.getTokenSet()["refresh"];
     }
