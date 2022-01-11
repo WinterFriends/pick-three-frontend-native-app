@@ -48,22 +48,28 @@ class AccountManager {
     }
 
     static setTokenSet(tokenSet) {
+        if (!tokenSet.hasOwnProperty("access") || !tokenSet.hasOwnProperty("refresh")) {
+            console.warn(`AccountManager.setTokenSet: Can't find accessToken or refreshToken`);
+            return;
+        }
+
         this._tokenSet = Object.freeze(tokenSet);
-        console.log(`AccountManager.setTokenSet: `, tokenSet);
+        this._isLogin(true);
+        console.log(`AccountManager.setTokenSet: accessToken: OK!, refreshToken: OK!`);
     }
 
     static getTokenSet() {
-        if (!this._isLogedin) return null;
+        if (!this.isLogedin()) return null;
         return this._tokenSet;
     }
 
     static getAccessToken() {
-        if (!this._isLogedin) return null;
+        if (!this.isLogedin()) return null;
         return this.getTokenSet()["access"];
     }
 
     static getRefreshToken() {
-        if (!this._isLogedin) return null;
+        if (!this.isLogedin()) return null;
         return this.getTokenSet()["refresh"];
     }
 
@@ -84,7 +90,7 @@ class AccountManager {
 
     static _setUserInfo(userInfo) {
         this._userInfo = Object.freeze(userInfo);
-        console.log(`AccountManager._setUserInfo: `, userInfo);
+        console.log(`AccountManager._setUserInfo: name="${userInfo.name}"`);
     }
 
     static _updateUserInfo(key, value) {
