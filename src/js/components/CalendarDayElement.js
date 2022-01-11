@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+import Colors from "../common/Colors";
 import GoalManager from "../managers/GoalManager";
 import DateUtils from "../utils/DateUtils";
 
@@ -38,7 +39,7 @@ class CalendarDayElement extends React.Component {
                                         style={{
                                             ...styles.mark,
                                             backgroundColor: GoalManager.getGoalById(goalId).getMainColor(),
-                                            marginRight: index < this.state.successGoalIdList.length - 1 ? 2 : 0
+                                            marginRight: index < this.state.successGoalIdList.length - 1 ? 3 : 0
                                         }}></View>
 
                             )
@@ -60,25 +61,26 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     calendarRowItemContainer: {
-        width: 40,
+        width: 36,
         alignItems: "center",
         alignSelf: "center",
         justifyContent: "center",
         paddingTop: 5,
-        paddingHorizontal: 5,
-        paddingBottom: 10,
+        paddingHorizontal: 6,
+        paddingBottom: 17
     },
     dayText: {
-        marginBottom: 10
+        fontSize: 16,
+        marginBottom: 3
     },
     selectedContainer: {
-        backgroundColor: "orange",
+        backgroundColor: Colors.primary02,
         borderRadius: 10,
     },
     selectedText: {
-        fontWeight: "bold"
     },
     todayText: {
+        fontWeight: "bold",
         textDecorationLine: "underline"
     },
     markContainer: {
