@@ -1,9 +1,11 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import Colors from "../common/Colors";
+import Styles from "../common/Styles";
 
 class UserGoalListElement extends React.Component {
     constructor(props) {
-        console.log("UserGoalListElement.constructor: ", props);
+        console.log(`UserGoalListElement.constructor: goalName="${props.goal.getName()}"`);
         super(props);
         this.userGoal = props.userGoal;
         this.goal = props.goal;
@@ -17,20 +19,27 @@ class UserGoalListElement extends React.Component {
         this.setState((state, props) => {
             let targetValue = !state.success;
             this.userGoal.setSuccess(targetValue);
-            props.changeUserGoalSuccess(this.userGoal);
+            props.onChangeUserGoalSuccess(this.userGoal);
             return { success: targetValue };
         });
     }
 
+    checkUserGoalDiaryEmpty() {
+        return this.userGoal.getDiary() == "" || !this.userGoal.getDiary();
+    }
+
     render() {
         return (
-            <TouchableOpacity style={styles.container} onPress={this.onPress.bind(this)}>
-                <View style={styles.goalIcon}><Text>{this.goal.getIcon()}</Text></View>
+            <TouchableOpacity activeOpacity={Styles.activeOpacity} style={styles.container} onPress={this.onPress.bind(this)}>
+                <Image style={styles.goalIcon} source={{ uri: this.userGoal.getSuccess() ? this.goal.getActiveIcon() : this.goal.getInactiveIcon() }} />
                 <View style={styles.goalContent}>
-                    <Text style={styles.goalName}>{this.goal.getName()}</Text>
-                    <Text style={styles.goalDiary}>{this.userGoal.getDiary()}</Text>
+                    <Text style={{ ...styles.goalName, marginTop: this.checkUserGoalDiaryEmpty() ? 0 : 6 }}>{this.goal.getName()}</Text>
+                    {
+                        this.checkUserGoalDiaryEmpty()
+                            ? null
+                            : <Text style={styles.goalDiary}>{this.userGoal.getDiary()}</Text>
+                    }
                 </View>
-                <Text style={styles.goalSuccess}>{this.userGoal.getSuccess() ? "S" : "F"}</Text>
             </TouchableOpacity >
         );
     }
@@ -40,24 +49,27 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         width: "100%",
-        padding: 15,
-        backgroundColor: "tomato",
-        borderColor: "red",
-        borderWidth: 2,
+        marginBottom: 15,
+        padding: 24,
         borderRadius: 10,
+        backgroundColor: Colors.white
     },
     goalIcon: {
-        marginRight: 15
+        width: 38,
+        height: 38,
+        marginRight: 20,
     },
-    goalContent: {},
-    goalName: {},
-    goalDiary: {},
-    goalSuccess: {
-        position: "absolute",
-        top: 0,
-        right: 0,
-        margin: 15
-    }
+    goalContent: {
+        flex: 1,
+        justifyContent: "center"
+    },
+    goalName: {
+        ...Styles.textStyle.subtitle01
+    },
+    goalDiary: {
+        ...Styles.textStyle.body02,
+        marginTop: 10
+    },
 });
 
 export default UserGoalListElement;

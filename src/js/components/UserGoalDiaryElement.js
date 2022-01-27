@@ -1,5 +1,7 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput } from "react-native";
+import Colors from "../common/Colors";
+import Styles from "../common/Styles";
 
 class UserGoalDiaryElement extends React.Component {
 
@@ -11,25 +13,35 @@ class UserGoalDiaryElement extends React.Component {
         this.userGoal = props.userGoal;
         this.goal = props.goal;
         this.state = {
-            text: (!this.userGoal.getDiary() || this.userGoal.getDiary().length === 0) ? "" : this.userGoal.getDiary()
+            text: (!this.userGoal.getDiary() || this.userGoal.getDiary().length === 0) ? "" : this.userGoal.getDiary(),
+            focus: false
         }
+    }
+
+    onFocus(value) {
+        this.setState({ focus: value });
     }
 
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.title}>
-                    <Text>{this.goal.getIcon()}</Text>
-                    <Text>{this.goal.getName()}</Text>
+                    <Image style={styles.goalIcon} source={{ uri: this.goal.getIcon() }} />
+                    <Text style={styles.goalName}>{this.goal.getName()}</Text>
                 </View>
                 <TextInput
-                    style={styles.diaryInput}
+                    style={[styles.diaryInput, this.state.focus ? styles.focusDiaryInput : null]}
+                    onFocus={this.onFocus.bind(this, true)}
+                    onBlur={this.onFocus.bind(this, false)}
                     multiline
-                    placeholder="일기를 입력해주세요."
+                    placeholder="내용을 입력해주세요."
                     maxLength={this._maxCount}
-                    onChangeText={text => this.setState({ text })}
+                    onChangeText={text => {
+                        this.setState({ text });
+                        this.userGoal.setDiary(text);
+                    }}
                     value={this.state.text} />
-                <Text>{this.state.text.length}/{this._maxCount}</Text>
+                <Text style={[styles.diaryCount, this.state.focus ? styles.focusDiaryCount : null]}>{this.state.text.length}/{this._maxCount}</Text>
             </View>
         );
     }
@@ -38,17 +50,41 @@ class UserGoalDiaryElement extends React.Component {
 const styles = StyleSheet.create({
     container: {
         width: "100%",
-        backgroundColor: "green"
+        marginBottom: 13
     },
     title: {
         flexDirection: "row",
-        marginBottom: 10
+        marginBottom: 9
+    },
+    goalIcon: {
+        width: 24,
+        height: 24,
+        marginRight: 10
+    },
+    goalName: {
+        ...Styles.textStyle.subtitle02,
+        marginTop: 3
     },
     diaryInput: {
-        paddingVertical: 20,
-        paddingHorizontal: 20,
-        borderRadius: 20,
-        backgroundColor: "tomato"
+        minHeight: 100,
+        marginBottom: 3,
+        padding: 17,
+        color: Colors.black02,
+        borderWidth: 1,
+        borderRadius: 8,
+        borderColor: Colors.black05,
+        textAlignVertical: "top"
+    },
+    focusDiaryInput: {
+        borderColor: Colors.black02
+    },
+    diaryCount: {
+        ...Styles.textStyle.caption,
+        marginLeft: "auto",
+        color: Colors.black05
+    },
+    focusDiaryCount: {
+        color: Colors.black02,
     }
 });
 

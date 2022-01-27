@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import Styles from "../common/Styles"
 
 class SettingElement extends React.Component {
     constructor(props) {
@@ -8,9 +9,9 @@ class SettingElement extends React.Component {
 
     render() {
         return (
-            <TouchableOpacity style={styles.container} onPress={this.props.onPress}>
-                <Text>{this.props.title}</Text>
-                <Text> &gt;</Text>
+            <TouchableOpacity style={styles.container} activeOpacity={Styles.activeOpacity} onPress={this.props.onPress}>
+                <Text style={styles.title}>{this.props.title}</Text>
+                <Image style={styles.button} source={require("../../img/right_arrow.png")} />
             </TouchableOpacity>
         );
     }
@@ -22,9 +23,15 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingHorizontal: 20,
-        paddingVertical: 20,
-        backgroundColor: "tomato"
+        paddingHorizontal: 27
+    },
+    title: {
+        ...Styles.textStyle.body01
+    },
+    button: {
+        width: 24,
+        height: 24,
+        marginVertical: 17
     }
 });
 

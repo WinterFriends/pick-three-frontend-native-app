@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import Colors from "../common/Colors";
+import Styles from "../common/Styles";
 import GoalManager from "../managers/GoalManager";
 import DateUtils from "../utils/DateUtils";
 
@@ -10,18 +10,19 @@ class CalendarDayElement extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log(`CalendarDayElement.constructor: date="${props.date}"`);
+
         let day = DateUtils.formattedStringToDate(props.date).getDate();
         this.state = {
             date: props.date,
             day,
             successGoalIdList: props.successGoalIdList
         };
-        console.log(`CalendarDayElement.constructor: date="${props.date}"`);
     }
 
     render() {
         return (
-            <TouchableOpacity style={styles.calendarRowItem} onPress={() => { this.props.onPress(this.props.date) }}>
+            <TouchableOpacity activeOpacity={Styles.activeOpacity} style={styles.calendarRowItem} onPress={() => { this.props.onPress(this.props.date) }}>
                 <View style={[styles.calendarRowItemContainer, this.props.selected ? styles.selectedContainer : null]}>
                     <Text style={[
                         styles.dayText,
@@ -67,25 +68,26 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         paddingTop: 5,
         paddingHorizontal: 6,
-        paddingBottom: 17
+        paddingBottom: 17,
     },
     dayText: {
-        fontSize: 16,
-        marginBottom: 3
+        ...Styles.textStyle.number,
+        marginBottom: 6
     },
     selectedContainer: {
-        backgroundColor: Colors.primary02,
         borderRadius: 10,
+        backgroundColor: Colors.primary03
     },
     selectedText: {
+        // fontFamily: "Pretendard-Medium"
     },
     todayText: {
-        fontWeight: "bold",
+        // fontFamily: "Pretendard-Medium",
         textDecorationLine: "underline"
     },
     markContainer: {
         height: 5,
-        flexDirection: "row",
+        flexDirection: "row"
     },
     mark: {
         width: 5,
