@@ -24,7 +24,11 @@ class DateUtils {
      * @returns date
      */
     static formattedStringToDate(formattedString) {
-        return new Date(formattedString);
+        var sYear = formattedString.substring(0, 4);
+        var sMonth = formattedString.substring(5, 7);
+        var sDate = formattedString.substring(8, 10);
+
+        return new Date(Number(sYear), Number(sMonth) - 1, Number(sDate));
     }
 
     static _dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
