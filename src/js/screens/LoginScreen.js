@@ -1,6 +1,7 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, View, Text, StatusBar, Button, Image } from "react-native";
 import { GoogleSignin, GoogleSigninButton } from "@react-native-google-signin/google-signin";
+import Constant from "../common/Constant";
 import AccountManager from "../managers/AccountManager"
 
 GoogleSignin.configure({
@@ -19,6 +20,7 @@ class LoginScreen extends React.Component {
 
     signIn = async () => {
         try {
+            // 구글 로그인
             await GoogleSignin.hasPlayServices();
 
             const userInfo = await GoogleSignin.signIn();
@@ -28,18 +30,22 @@ class LoginScreen extends React.Component {
             AccountManager.setUserPhoto(userInfo.user.photo);
             AccountManager.saveUserInfo();
 
-            const idToken = await (await GoogleSignin.getTokens()).idToken;
-            let response = await fetch("https://api.winty.io/login/google", { headers: { "Authorization": idToken } });
+            const tokens = await GoogleSignin.getTokens();
+            const idToken = tokens.idToken;
+
+            // winty 로그인
+            let wintyLoginUri = Constant.API_DOMAIN + "/login/google";
+            let response = await fetch(wintyLoginUri, { headers: { "Authorization": idToken } });
             const tokenSet = await response.json();
             AccountManager.setTokenSet(tokenSet);
             AccountManager.saveTokenSet();
 
-            this.props.navigation.replace("TabNavigationScreen");
+            let accessToken = AccountManager.getAccessToken();
+            if (accessToken == null) {
+                return console.log("LoginScreen.signIn: Login failed");
+            }
 
-            this.setState({
-                userInfo: AccountManager.getUserInfo(),
-                loaded: true
-            });
+            this.props.navigation.replace("SplashScreen");
         }
         catch (error) {
             console.log(error);
