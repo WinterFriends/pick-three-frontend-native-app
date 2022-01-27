@@ -1,6 +1,9 @@
 import React from "react";
-import { View, Text, Button, ScrollView, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, Button, Image, ScrollView, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import Colors from "../common/Colors";
 import Goal from "../common/Goal";
+import Styles from "../common/Styles";
 import UserGoal from "../common/UserGoal";
 import UserGoalDiaryElement from "../components/UserGoalDiaryElement";
 import ApiManager from "../managers/ApiManager";
@@ -8,8 +11,7 @@ import GoalManager from "../managers/GoalManager";
 import DateUtils from "../utils/DateUtils";
 
 class WriteDiaryScreen extends React.Component {
-
-    userGoalIndex = 0;
+    key = 0;
 
     constructor(props) {
         super(props);
@@ -36,21 +38,29 @@ class WriteDiaryScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.buttons}>
-                    <Button title="back" onPress={this.onPressBackButton.bind(this)} />
-                    <Button title="delete all" onPress={this.onPressDeleteAllButton.bind(this)} />
+                {/* 상단바 */}
+                <View style={styles.topbar}>
+                    <TouchableOpacity
+                        activeOpacity={Styles.activeOpacity}
+                        style={styles.button}
+                        onPress={this.onPressBackButton.bind(this)}>
+                        <Image source={require("../../img/back_btn.png")} style={styles.buttonImage} />
+                    </TouchableOpacity>
+                    <Text style={styles.monthAndDay}>{this.state.date.getMonth() + 1}월 {this.state.date.getDate()}일</Text>
                 </View>
 
-                <View style={styles.title}>
-                    <Text>Today's Diary</Text>
-                    <Text>오늘의 일기를 작성해주세요.</Text>
+                {/* 타이틀 */}
+                <View style={styles.titleContainer}>
+                    <View style={styles.titleCircle}></View>
+                    <Text style={styles.title}>Today's DIARY</Text>
+                    <Text style={styles.titleCaption}>오늘의 일기를 작성해주세요.</Text>
                 </View>
 
-                <ScrollView style={styles.scrollView} contentContainerStyle={{ padding: 20 }}>
+                <ScrollView style={styles.userGoalDiaryList} contentContainerStyle={styles.userGoalDiaryListContainer}>
                     {
                         this.userGoalList.map(userGoal => {
                             return <UserGoalDiaryElement
-                                key={this.userGoalIndex++}
+                                key={this.key++}
                                 userGoal={userGoal}
                                 goal={GoalManager.getGoalById(userGoal.getGoalId())}
                             />;
@@ -58,8 +68,8 @@ class WriteDiaryScreen extends React.Component {
                     }
                 </ScrollView>
 
-                <TouchableOpacity style={styles.confirmButton} onPress={this.onPressConfirm.bind(this)}>
-                    <Text>저장</Text>
+                <TouchableOpacity style={styles.confirmButton} activeOpacity={Styles.activeOpacity} onPress={this.onPressConfirmButton.bind(this)}>
+                    <Text style={styles.confirmButtonText}>저장</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -68,28 +78,74 @@ class WriteDiaryScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingTop: 20
+        height: "100%",
+        paddingTop: getStatusBarHeight(),
+        justifyContent: "center",
+        alignItems: "flex-start",
+        backgroundColor: Colors.white
     },
-    buttons: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginTop: 20,
-        marginBottom: 20,
-        paddingHorizontal: 30
+
+    // 상단바
+    topbar: {
+        width: "100%",
+        justifyContent: "center"
+    },
+    button: {
+        paddingVertical: 15,
+        paddingHorizontal: 21,
+        marginRight: "auto"
+    },
+    buttonImage: {
+        width: 24,
+        height: 24
+    },
+    monthAndDay: {
+        ...Styles.textStyle.body01,
+        position: "absolute",
+        alignSelf: "center"
+    },
+
+    // 타이틀
+    titleContainer: {
+        alignSelf: "center"
+    },
+    titleCircle: {
+        position: "absolute",
+        left: -22,
+        width: 48,
+        height: 48,
+        borderRadius: 100,
+        backgroundColor: Colors.primary01
     },
     title: {
-        alignItems: "center"
+        ...Styles.textStyle.head01,
+        marginTop: 14,
+        marginBottom: 4
     },
-    scrollView: {
-        width: "100%",
-        backgroundColor: "teal"
+    titleCaption: {
+        ...Styles.textStyle.body06,
+        alignSelf: "center",
+        color: Colors.black06
     },
+
+    // 사용자 목표 리스트
+    userGoalDiaryList: {
+        width: "100%"
+    },
+    userGoalDiaryListContainer: {
+        paddingTop: 27,
+        paddingHorizontal: 35
+    },
+
+    // 확인 버튼
     confirmButton: {
         width: "100%",
         paddingVertical: 20,
         alignItems: "center",
-        backgroundColor: "yellow"
+        backgroundColor: Colors.primary01
+    },
+    confirmButtonText: {
+        ...Styles.textStyle.body05
     }
 });
 

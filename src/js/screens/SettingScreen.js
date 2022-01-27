@@ -1,8 +1,12 @@
 import React from "react";
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import SettingElement from "../components/SettingElement";
 import StatusBar from "../components/StatusBar";
 import AccountManager from "../managers/AccountManager";
+import Colors from "../common/Colors";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import Styles from "../common/Styles";
 
 class SettingScreen extends React.Component {
     constructor(props) {
@@ -21,8 +25,8 @@ class SettingScreen extends React.Component {
     onPressLogOut() {
         console.log("SettingScreen.onPressLogOut");
         GoogleSignin.signOut().then(() => {
-        AccountManager.logout();
-        this.props.navigation.replace("LoginScreen");
+            AccountManager.logout();
+            this.props.navigation.replace("LoginScreen");
         });
     }
 
@@ -33,26 +37,46 @@ class SettingScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Setting</Text>
+                {/* 상단바 */}
+                <View style={styles.topbar}>
+                    <View style={styles.buttons}>
+                    </View>
 
-                <View style={styles.profileContainer}>
-                    <Text><Text>{AccountManager.getUserName()}</Text>님</Text>
-                    <TouchableOpacity onPress={this.onPressUpdateProfile.bind(this)}><Text>수정</Text></TouchableOpacity>
+                    {/* 타이틀 */}
+                    <Text style={styles.title}>Setting</Text>
                 </View>
 
-                <View style={styles.profileContainer}>
-                    <Text>아이콘</Text>
-                    <Text>yucheon6000@gmail.com</Text>
-                </View>
+                {/* 스크롤 뷰 */}
+                <ScrollView style={styles.mainScrollView}>
+                    {/* 프로필 */}
+                    <View style={styles.profileContainer}>
+                        <SettingElement
+                            title={
+                                <Text style={Styles.textStyle.body05}><Text style={{ ...Styles.textStyle.subtitle01, fontSize: 24 }}>{AccountManager.getUserName()}</Text>님</Text>
+                            }
+                            onPress={this.onPressUpdateProfile.bind(this)} />
 
-                <SettingElement title="로그아웃" onPress={this.onPressLogOut.bind(this)} />
-                <SettingElement title="계정삭제" onPress={this.onPressDeleteAccount.bind(this)} />
+                        {/* 소셜 정보 */}
+                        <View style={styles.socialContainer}>
+                            <Image style={styles.socialIcon} source={require(`../../img/social_${"google"}.png`)} />
+                            <Text style={styles.socialEmail}>{AccountManager.getUserEmail()}</Text>
+                        </View>
+                    </View>
 
-                <View style={styles.secantLine}></View>
+                    {/* 버튼 */}
+                    <SettingElement title="공지사항" />
+                    <SettingElement title="서비스 이용약관" />
+                    <SettingElement title="개인정보처리방침" />
+                    <SettingElement title="문의하기" />
 
-                <SettingElement title="개인정보처리방침" />
-                <SettingElement title="서비스 이용약관" />
-                <SettingElement title="문의하기" />
+                    <View style={styles.secantLineContainer}>
+                        <View style={styles.secantLine}></View>
+                    </View>
+
+                    <SettingElement title="로그아웃" onPress={this.onPressLogOut.bind(this)} />
+                    <SettingElement title="계정삭제" onPress={this.onPressDeleteAccount.bind(this)} />
+                </ScrollView>
+
 
                 <StatusBar />
             </View>
@@ -62,18 +86,59 @@ class SettingScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        height: "100%",
+        paddingTop: getStatusBarHeight(),
+        backgroundColor: Colors.white
     },
+
+    // 상단바
+    topbar: {
+        justifyContent: "center"
+    },
+    buttons: {
+        marginVertical: 15,
+        width: 24,
+        height: 24
+    },
+    title: {
+        ...Styles.textStyle.head02,
+        position: "absolute",
+        marginLeft: 25
+    },
+
+    // 메인 스크롤
+    mainScrollView: {
+        width: "100%"
+    },
+
+    // 프로필
     profileContainer: {
-        flexDirection: "row"
+        paddingVertical: 52,
+    },
+    socialContainer: {
+        flexDirection: "row",
+        paddingHorizontal: 27,
+        alignItems: "center"
+    },
+    socialIcon: {
+        width: 13,
+        height: 13,
+        marginRight: 6
+    },
+    socialEmail: {
+        ...Styles.textStyle.body03
+    },
+
+    // 구분선
+    secantLineContainer: {
+        width: "100%",
+        paddingHorizontal: 27,
     },
     secantLine: {
         width: "100%",
         height: 1,
-        marginVertical: 10,
-        backgroundColor: "grey"
+        marginVertical: 26,
+        backgroundColor: Colors.gray01
     }
 });
 

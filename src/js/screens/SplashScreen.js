@@ -1,5 +1,8 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View, Text, StatusBar, Button, Image } from "react-native";
+import { SafeAreaView, StyleSheet, View, Text, Button, Image } from "react-native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import Styles from "../common/Styles";
+import StatusBar from "../components/StatusBar";
 import AccountManager from "../managers/AccountManager"
 import ApiManager from "../managers/ApiManager";
 import GoalManager from "../managers/GoalManager";
@@ -37,8 +40,8 @@ class SplashScreen extends React.Component {
     init() {
         AccountManager.loadTokenSet()
             .then(logedin => {
-            if (logedin) {
-                AccountManager.loadUserInfo()
+                if (logedin) {
+                    AccountManager.loadUserInfo()
                         .then(
                             ApiManager.getGoalList()
                                 .then(goalList => {
@@ -61,17 +64,18 @@ class SplashScreen extends React.Component {
                     // 화면 이동
                     if (this.state.timeout)
                         this.navigation.replace("LoginScreen");
-            }
-        });
+                }
+            });
     }
-
 
     render() {
         return (
-            <View>
-                <SafeAreaView>
-                    <Text>SplashScreen</Text>
-                </SafeAreaView>
+            <View style={styles.container}>
+                <View style={styles.titleContainer}>
+                    <Image style={styles.logo} source={require("../../img/pickple_logo.png")} />
+                    <Text style={styles.title}>Pickple</Text>
+                </View>
+                <StatusBar />
             </View>
         );
     }
@@ -79,6 +83,22 @@ class SplashScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
+    container: {
+        height: "100%",
+        paddingTop: getStatusBarHeight(),
+        justifyContent: "center",
+    },
+    titleContainer: {
+        alignItems: "center"
+    },
+    logo: {
+        width: 70,
+        height: 70,
+        marginBottom: 17
+    },
+    title: {
+        ...Styles.textStyle.head01
+    }
 });
 
 export default SplashScreen;
