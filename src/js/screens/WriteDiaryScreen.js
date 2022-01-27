@@ -3,28 +3,9 @@ import { View, Text, Button, ScrollView, TouchableOpacity, StyleSheet, Alert } f
 import Goal from "../common/Goal";
 import UserGoal from "../common/UserGoal";
 import UserGoalDiaryElement from "../components/UserGoalDiaryElement";
+import ApiManager from "../managers/ApiManager";
 import GoalManager from "../managers/GoalManager";
-
-let userGoalList = [
-    new UserGoal(
-        '2021-12-22',
-        1,
-        false,
-        "열심히 일을 했다..?"
-    ),
-    new UserGoal(
-        '2021-12-22',
-        2,
-        false,
-        "열심히 건강을 했다..?"
-    ),
-    new UserGoal(
-        '2021-12-22',
-        3,
-        false,
-        "열심히 가족을 했다..?"
-    ),
-]
+import DateUtils from "../utils/DateUtils";
 
 class WriteDiaryScreen extends React.Component {
 
@@ -32,34 +13,24 @@ class WriteDiaryScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        this.userGoalList = [...userGoalList];
+
+        let dateString = props.route.params.date;
+        let date = DateUtils.formattedStringToDate(dateString);
+
+        this.state = {
+            dateString: dateString,
+            date: date
+        }
+        this.userGoalList = props.route.params.userGoalList;
     }
 
     onPressBackButton() {
         this.props.navigation.goBack(null);
     }
 
-    onPressDeleteAllButton() {
-        console.log("WriteDiaryScreen.onPressDeleteAllButton");
-        let navigation = this.props.navigation;
-        Alert.alert(
-            "일기 삭제",
-            "일기를 삭제하시겠습니까?",
-            [
-                {
-                    text: "취소",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
-                },
-                {
-                    text: "확인", onPress: () => navigation.goBack(null)
-                }
-            ]
-        )
-    }
-
-    onPressConfirm() {
-        this.props.navigation.goBack(null);
+    onPressConfirmButton() {
+        ApiManager.setUserGoalDetailByDate(this.props.route.params.date, this.userGoalList, ["diary"])
+            .then(status => this.props.navigation.goBack(null));
     }
 
     render() {
