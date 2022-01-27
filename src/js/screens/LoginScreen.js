@@ -1,8 +1,12 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View, Text, StatusBar, Button, Image } from "react-native";
+import { SafeAreaView, StyleSheet, View, Text, Button, Image } from "react-native";
 import { GoogleSignin, GoogleSigninButton } from "@react-native-google-signin/google-signin";
 import Constant from "../common/Constant";
 import AccountManager from "../managers/AccountManager"
+import StatusBar from "../components/StatusBar";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import Colors from "../common/Colors";
+import Styles from "../common/Styles";
 
 GoogleSignin.configure({
     webClientId: "727563278880-89dkcgmm187dok7osr5c1cmjd85dhol3.apps.googleusercontent.com",
@@ -54,28 +58,23 @@ class LoginScreen extends React.Component {
 
     render() {
         return (
-            <View>
-                <StatusBar barStyle="dark-content" />
-                <SafeAreaView>
-                    <GoogleSigninButton
-                        style={{ width: 192, height: 48 }}
-                        size={GoogleSigninButton.Size.Wide}
-                        color={GoogleSigninButton.Color.Dark}
-                        onPress={this.signIn.bind(this)} />
+            <View style={styles.container}>
+                <View style={{ flex: 1 }}></View>
 
-                    {this.state.loaded ?
-                        <View>
-                            <Text>{this.state.userInfo.name}</Text>
-                            <Text>{this.state.userInfo.email}</Text>
-                            <Image
-                                style={{ width: 100, height: 100 }}
-                                source={{ uri: this.state.userInfo.photo }}
-                            />
-                        </View> :
+                <Image source={require("../../img/pickple_logo.png")} style={styles.logo} />
 
-                        <Text>Not SignedIn</Text>
-                    }
-                </SafeAreaView>
+                <Text style={styles.title}>Pickple</Text>
+                <Text style={styles.welcome}>소셜 계정으로 빠르게 시작해보세요</Text>
+
+
+                <GoogleSigninButton
+                    style={{ width: "100%", height: 50, marginBottom: 30 }}
+                    size={GoogleSigninButton.Size.Wide}
+                    color={GoogleSigninButton.Color.Light}
+                    onPress={this.signIn.bind(this)} />
+
+                <Text style={styles.notice}>회원 가입 시, 이용약관 및 개인정보처리방침에 동의한 것으로 간주합니다.</Text>
+                <StatusBar style="light" />
             </View>
         );
     }
@@ -83,43 +82,32 @@ class LoginScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
-    listHeader: {
-        backgroundColor: '#eee',
-        color: "#222",
-        height: 44,
-        padding: 12
+    container: {
+        height: "100%",
+        paddingTop: getStatusBarHeight(),
+        paddingHorizontal: 35,
+        backgroundColor: "#222222"
     },
-    detailContainer: {
-        paddingHorizontal: 20
+    logo: {
+        width: 53,
+        height: 53,
+        marginBottom: 19
     },
     title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        paddingTop: 10
+        ...Styles.textStyle.head01,
+        fontSize: 35,
+        color: Colors.primary01,
+        marginBottom: 14
     },
-    message: {
-        fontSize: 14,
-        paddingBottom: 15,
-        borderBottomColor: "#ccc",
-        borderBottomWidth: 1
+    welcome: {
+        ...Styles.textStyle.body01,
+        color: Colors.white,
+        marginBottom: 50
     },
-    dp: {
-        marginTop: 32,
-        paddingHorizontal: 24,
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    sectionContainer: {
-        marginTop: 32,
-        paddingHorizontal: 24,
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    buttonContainer: {
-        marginTop: 32,
-        paddingHorizontal: 24,
-        flexDirection: 'row',
-        justifyContent: 'center'
+    notice: {
+        ...Styles.textStyle.body01,
+        color: Colors.black03,
+        marginBottom: 90
     }
 });
 

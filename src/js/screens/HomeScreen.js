@@ -9,6 +9,9 @@ import GoalManager from "../managers/GoalManager";
 import ApiManager from "../managers/ApiManager";
 import CalendarDayElement from "../components/CalendarDayElement";
 import UserGoalUtils from "../utils/UserGoalUtils";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import Styles from "../common/Styles";
+import Colors from "../common/Colors";
 
 class HomeScreen extends React.Component {
     key = 0;
@@ -156,49 +159,45 @@ class HomeScreen extends React.Component {
         return (
             <View style={styles.container} >
                 {/* 상단바 */}
-                < View style={styles.buttons} >
-                    {
-                        this.state.userGoalList.length != 0 ?
-                            <Button title="Write Diary"
-                                style={styles.button}
-                                onPress={() => {
-                                    this.props.navigation.navigate(
-                                        "WriteDiaryScreen",
-                                        {
-                                            date: this.state.targetDateString,
-                                            userGoalList: this.state.userGoalList
-                                        }
-                                    );
-                                }}
-                            />
-                            : null
-                    }
-                    < Button
-                        title="Select Goal"
-                        style={styles.button}
-                        onPress={() => {
-                            this.props.navigation.navigate(
-                                "SelectGoalScreen",
-                                {
-                                    date: this.state.targetDateString,
-                                    selectedGoalIdList: UserGoalUtils.getSelectedGoalIdList(this.state.userGoalList)
-                                }
-                            );
-                        }} />
-                </View >
+                <View style={styles.topbar}>
+                    < View style={styles.buttons} >
+                        {/* 일기 작성 버튼 */}
+                        {
+                            this.checkSelectGoal()
+                                ? <TouchableOpacity
+                                    activeOpacity={Styles.activeOpacity}
+                                    style={{ ...styles.button, marginRight: 13, marginLeft: "auto" }}
+                                    onPress={this.onPressWriteDiaryButton.bind(this)}>
+                                    <Image title="Write Diary" source={require("../../img/write_diary_btn.png")} style={styles.buttonImage} />
+                                </TouchableOpacity>
+                                : null
+                        }
 
-                <TouchableOpacity>
-                    <Text style={styles.calendar}>{this.state.targetDate.getMonth() + 1}월 {this.state.targetDate.getDate()}일</Text>
-                </TouchableOpacity>
+                        {/* 목표 선택 버튼 */}
+                        <TouchableOpacity
+                            activeOpacity={Styles.activeOpacity}
+                            style={{ ...styles.button, marginLeft: this.checkSelectGoal() ? 0 : "auto" }}
+                            onPress={this.onPressSelectGoalButton.bind(this)}>
+                            < Image title="Select Goal" source={require("../../img/select_goal_btn.png")} style={styles.buttonImage} />
+                        </TouchableOpacity>
+                    </View >
+
+                    {/* 선택된 날짜 */}
+                    <Text style={styles.monthAndDay}>{this.state.targetDate.getMonth() + 1}월 {this.state.targetDate.getDate()}일</Text>
+                </View>
 
                 {/* 캘린더 */}
                 <View>
                     <View style={styles.calendar}>
-                        <View style={styles.calendarRow}>
+
+                        {/* 요일 */}
+                        <View style={{ ...styles.calendarRow, marginBottom: 9, color: Colors.black03 }}>
                             {
                                 Object.keys(this.state.userGoalListByDate).map(date => <Text key={this.key++} style={styles.calendarRowItem}>{DateUtils.getDayOfWeek(DateUtils.formattedStringToDate(date))}</Text>)
                             }
                         </View>
+
+                        {/* 날짜 */}
                         <View style={styles.calendarRow}>
                             {
                                 Object.keys(this.state.userGoalListByDate).map(date => {
@@ -217,18 +216,32 @@ class HomeScreen extends React.Component {
                 </View>
 
                 {/* 사용자 목표 내용 */}
-                <ScrollView style={styles.userGoalList} contentContainerStyle={{ padding: 30 }}>
-                    {
-                        this.state.userGoalList.map((userGoal, i) =>
-                            <UserGoalListElement
-                                key={this.key++}
-                                userGoal={userGoal}
-                                goal={GoalManager.getGoalById(userGoal.getGoalId())}
-                                onChangeUserGoalSuccess={this.onChangeUserGoalSuccess.bind(this)}
-                            />
-                        )
-                    }
-                </ScrollView>
+                {
+                    this.checkSelectGoal()
+                        ? <ScrollView style={styles.userGoalList} contentContainerStyle={styles.userGoalListContainer}>
+                            {
+                                this.state.userGoalList.map(userGoal =>
+                                    <UserGoalListElement
+                                        key={this.key++}
+                                        userGoal={userGoal}
+                                        goal={GoalManager.getGoalById(userGoal.getGoalId())}
+                                        onChangeUserGoalSuccess={this.onChangeUserGoalSuccess.bind(this)}
+                                    />
+                                )
+                            }
+                        </ScrollView>
+
+                        : <View style={{ ...styles.userGoalList, justifyContent: "center", alignItems: "center" }}>
+                            <View style={{ justifyContent: "center", alignItems: "center" }} >
+                                <TouchableOpacity
+                                    activeOpacity={Styles.activeOpacity}
+                                    onPress={this.onPressSelectGoalButton.bind(this)}>
+                                    <Image source={require("../../img/select_goal_circle_btn.png")} style={{ width: 50, height: 50, marginBottom: 17 }} />
+                                </TouchableOpacity>
+                                <Text style={Styles.textStyle.body01}>오늘의 세 가지를 선택하세요</Text>
+                            </View>
+                        </View>
+                }
                 <StatusBar />
             </View >
         );
@@ -237,37 +250,60 @@ class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 20,
-        height: "100%"
+        height: "100%",
+        paddingTop: getStatusBarHeight(),
+        backgroundColor: Colors.white
+    },
+
+    // 상단바
+    topbar: {
+        justifyContent: "center"
     },
     buttons: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: 20,
-        marginBottom: 20,
-        paddingHorizontal: 30
+        paddingRight: 25
     },
     button: {
-        width: "auto"
+        paddingVertical: 15
     },
+    buttonImage: {
+        width: 24,
+        height: 24
+    },
+    monthAndDay: {
+        ...Styles.textStyle.body01,
+        position: "absolute",
+        marginLeft: 25
+    },
+
+    // 캘린더
     calendar: {
         width: "100%",
-        padding: 10
+        paddingTop: 9,
+        paddingHorizontal: 18,
+        paddingBottom: 22
     },
     calendarRow: {
         width: "100%",
-        flexDirection: "row",
-        marginBottom: 10
+        flexDirection: "row"
     },
     calendarRowItem: {
+        ...Styles.textStyle.body02,
         flex: 1,
-        textAlign: "center",
+        textAlign: "center"
     },
+
+    // 사용자 목표
     userGoalList: {
         flexGrow: 1,
         width: "100%",
-        backgroundColor: "orange"
+        backgroundColor: Colors.background,
+    },
+    userGoalListContainer: {
+        paddingVertical: 21,
+        paddingHorizontal: 20
     }
-})
+});
 
 export default HomeScreen;
