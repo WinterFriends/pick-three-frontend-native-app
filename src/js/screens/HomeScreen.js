@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { View, Text, Button, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import React from "react";
+import { View, Text, Button, ScrollView, TouchableOpacity, StyleSheet, Image } from "react-native";
 import DateUtils from "../utils/DateUtils";
 import Goal from "../common/Goal";
 import UserGoal from "../common/UserGoal";
@@ -57,12 +57,16 @@ class HomeScreen extends React.Component {
         this.unsubscribe();
     }
 
+    checkSelectGoal() {
+        return this.state.userGoalList.length != 0;
+    }
+
     /**
      * 날짜를 선택했을 때 사용하는 함수
      * @param {string} date 
      */
     updateTargetDate(date) {
-        console.log("HomeScreen.updateTargetDate");
+        console.log("HomeScreen.updateTargetDate:", date);
 
         this.setState({
             targetDate: DateUtils.formattedStringToDate(date),
@@ -77,7 +81,7 @@ class HomeScreen extends React.Component {
      * @param {string} date
      */
     updateCalendar(date) {
-        console.log("HomeScreen.updateCalendar");
+        console.log("HomeScreen.updateCalendar:", date);
 
         // 선택된 날짜
         let targetDate = DateUtils.formattedStringToDate(date);   // string -> Date
@@ -104,6 +108,26 @@ class HomeScreen extends React.Component {
 
         ApiManager.getUserGoalListByDate(date, 1, ["success", "diary"])
             .then(userGoalListByDate => this.setState({ userGoalList: UserGoalUtils.sortUserGoalListByGoalId(userGoalListByDate[date]) }));
+    }
+
+    onPressSelectGoalButton() {
+        this.props.navigation.navigate(
+            "SelectGoalScreen",
+            {
+                date: this.state.targetDateString,
+                selectedGoalIdList: UserGoalUtils.getSelectedGoalIdList(this.state.userGoalList)
+            }
+        );
+    }
+
+    onPressWriteDiaryButton() {
+        this.props.navigation.navigate(
+            "WriteDiaryScreen",
+            {
+                date: this.state.targetDateString,
+                userGoalList: this.state.userGoalList
+            }
+        );
     }
 
     /**
