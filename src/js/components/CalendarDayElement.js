@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+import Colors from "../common/Colors";
+import Styles from "../common/Styles";
 import GoalManager from "../managers/GoalManager";
 import DateUtils from "../utils/DateUtils";
 
@@ -9,18 +10,19 @@ class CalendarDayElement extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log(`CalendarDayElement.constructor: date="${props.date}"`);
+
         let day = DateUtils.formattedStringToDate(props.date).getDate();
         this.state = {
             date: props.date,
             day,
             successGoalIdList: props.successGoalIdList
         };
-        console.log(`CalendarDayElement.constructor: date="${props.date}"`);
     }
 
     render() {
         return (
-            <TouchableOpacity style={styles.calendarRowItem} onPress={() => { this.props.onPress(this.props.date) }}>
+            <TouchableOpacity activeOpacity={Styles.activeOpacity} style={styles.calendarRowItem} onPress={() => { this.props.onPress(this.props.date) }}>
                 <View style={[styles.calendarRowItemContainer, this.props.selected ? styles.selectedContainer : null]}>
                     <Text style={[
                         styles.dayText,
@@ -38,7 +40,7 @@ class CalendarDayElement extends React.Component {
                                         style={{
                                             ...styles.mark,
                                             backgroundColor: GoalManager.getGoalById(goalId).getMainColor(),
-                                            marginRight: index < this.state.successGoalIdList.length - 1 ? 2 : 0
+                                            marginRight: index < this.state.successGoalIdList.length - 1 ? 3 : 0
                                         }}></View>
 
                             )
@@ -60,30 +62,32 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     calendarRowItemContainer: {
-        width: 40,
+        width: 36,
         alignItems: "center",
         alignSelf: "center",
         justifyContent: "center",
         paddingTop: 5,
-        paddingHorizontal: 5,
-        paddingBottom: 10,
+        paddingHorizontal: 6,
+        paddingBottom: 17,
     },
     dayText: {
-        marginBottom: 10
+        ...Styles.textStyle.number,
+        marginBottom: 6
     },
     selectedContainer: {
-        backgroundColor: "orange",
         borderRadius: 10,
+        backgroundColor: Colors.primary03
     },
     selectedText: {
-        fontWeight: "bold"
+        // fontFamily: "Pretendard-Medium"
     },
     todayText: {
+        // fontFamily: "Pretendard-Medium",
         textDecorationLine: "underline"
     },
     markContainer: {
         height: 5,
-        flexDirection: "row",
+        flexDirection: "row"
     },
     mark: {
         width: 5,
