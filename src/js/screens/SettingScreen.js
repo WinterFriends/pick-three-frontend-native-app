@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import SettingElement from "../components/SettingElement";
 import StatusBar from "../components/StatusBar";
 import AccountManager from "../managers/AccountManager";
@@ -20,8 +20,10 @@ class SettingScreen extends React.Component {
 
     onPressLogOut() {
         console.log("SettingScreen.onPressLogOut");
+        GoogleSignin.signOut().then(() => {
         AccountManager.logout();
         this.props.navigation.replace("LoginScreen");
+        });
     }
 
     onPressDeleteAccount() {
