@@ -34,9 +34,7 @@ class LoginScreen extends React.Component {
             const idToken = tokens.idToken;
 
             // winty 로그인
-            let wintyLoginUri = Constant.API_DOMAIN + "/login/google";
-            let response = await fetch(wintyLoginUri, { headers: { "Authorization": idToken } });
-            const tokenSet = await response.json();
+            const tokenSet = await ApiManager.loginByGoogle(idToken);
             AccountManager.setTokenSet(tokenSet);
             AccountManager.saveTokenSet();
 
