@@ -4,6 +4,8 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import Colors from "../common/Colors";
 import Styles from "../common/Styles";
 import StatusBar from "../components/StatusBar";
+import AccountManager from "../managers/AccountManager";
+import ApiManager from "../managers/ApiManager";
 
 class EditProfileScreen extends React.Component {
     nameMaxCount = 10;
@@ -11,7 +13,7 @@ class EditProfileScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: "",
+            name: AccountManager.getUserProfile().getName(),
             focus: false
         }
     }
@@ -34,8 +36,16 @@ class EditProfileScreen extends React.Component {
 
     onPressSaveProfileButton() {
         console.log("EditProfileScreen.onPressSaveProfileButton");
-        // Save
-        this.goBack();
+
+        let userProfile = AccountManager.getUserProfile().clone();
+        userProfile.setName(this.state.name);
+
+        ApiManager.setUserProfile(userProfile, ["name", "email", "birth"])
+            .then(state => {
+                AccountManager.setUserProfile(userProfile);
+                AccountManager.saveUserProfile()
+                    .then(this.goBack());
+            });
     }
 
     onFocus(value) {
