@@ -1,6 +1,7 @@
 import Constant from "../common/Constant";
 import Goal from "../common/Goal";
 import UserGoal from "../common/UserGoal";
+import UserProfile from "../common/UserProfile";
 import AccountManager from "./AccountManager";
 
 class ApiManager {
@@ -50,7 +51,7 @@ class ApiManager {
             method: "POST",
             ...this.getFetchHeaders(),
             body: data
-        }
+        };
 
         let uri = Constant.API_DOMAIN + "/user/goal/detail/get";
         let response = await fetch(uri, options);
@@ -94,9 +95,46 @@ class ApiManager {
             method: "POST",
             ...this.getFetchHeaders(),
             body: data
-        }
+        };
 
         let uri = Constant.API_DOMAIN + "/user/goal/detail/set";
+        let response = await fetch(uri, options);
+        let status = response.status;
+
+        return status;
+    }
+
+    static async getUserProfile() {
+        let response = await fetch(Constant.API_DOMAIN + "/user/profile", this.getFetchHeaders());
+        let json = await response.json();
+
+        console.log(json);
+
+        let userProfile = UserProfile.fromJson(json.profile);
+
+        return userProfile;
+    }
+
+    /**
+     * UserProfile을 서버에 저장하는 함수
+     * @param {UserProfile} userProfile 
+     * @param {list<string>} updateColumn 
+     */
+    static async setUserProfile(userProfile, updateColumn) {
+        userProfile = userProfile.toJson();
+
+        let data = JSON.stringify({
+            updateColumn,
+            profile: userProfile
+        });
+
+        let options = {
+            method: "POST",
+            ...this.getFetchHeaders(),
+            body: data
+        };
+
+        let uri = Constant.API_DOMAIN + "/user/profile";
         let response = await fetch(uri, options);
         let status = response.status;
 
