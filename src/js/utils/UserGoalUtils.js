@@ -34,6 +34,59 @@ class UserGoalUtils {
     static sortUserGoalListByGoalId(userGoalList) {
         return userGoalList.sort((userGoalA, userGoalB) => userGoalA.getGoalId() - userGoalB.getGoalId());
     }
+
+    static getReport(goalIdList, userGoalListByDate) {
+        let result = this.getDefaultReport(goalIdList);
+
+        // 카운드 집계
+        for (let date in userGoalListByDate) {
+            let userGoalList = userGoalListByDate[date];
+            userGoalList.map(userGoal => {
+                let goalId = userGoal.getGoalId();
+                result.select.countByGoalId[goalId]++;
+                if (userGoal.getSuccess())
+                    result.success.countByGoalId[goalId]++;
+            });
+        }
+
+        // 합계, 최소, 최대 카운트 집계
+        let successList = Object.values(result.success.countByGoalId);
+        result.success.minCount = Math.min(...successList);
+        result.success.maxCount = Math.max(...successList);
+        successList.map(count => result.success.totalCount += count);
+
+        let selectList = Object.values(result.select.countByGoalId);
+        result.select.minCount = Math.min(...selectList);
+        result.select.maxCount = Math.max(...selectList);
+        selectList.map(count => result.select.totalCount += count);
+
+        return result;
+    }
+
+    static getDefaultReport(goalIdList) {
+        let result = {
+            success: {
+                maxCount: 0,
+                minCount: 0,
+                totalCount: 0,
+                countByGoalId: {}
+            },
+            select: {
+                maxCount: 0,
+                minCount: 0,
+                totalCount: 0,
+                countByGoalId: {}
+            }
+        };
+
+        // 0으로 초기화
+        goalIdList.map(goalId => {
+            result.success.countByGoalId[goalId] = 0;
+            result.select.countByGoalId[goalId] = 0;
+        });
+
+        return result;
+    }
 }
 
 export default UserGoalUtils;
