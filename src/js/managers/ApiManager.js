@@ -17,6 +17,18 @@ class ApiManager {
     }
 
     /**
+     * winty에 구글로 로그인하는 함수
+     * @param {string} idToken 
+     * @returns tokenSet
+     */
+    static async loginByGoogle(idToken) {
+        let wintyLoginUri = Constant.API_DOMAIN + "/login/google";
+        let response = await fetch(wintyLoginUri, { headers: { "Authorization": idToken } });
+        const tokenSet = await response.json();
+        return tokenSet;
+    }
+
+    /**
      * 정의된 Goal을 불러오는 함수
      * @returns Goal이 들어있는 리스트
      */
@@ -104,6 +116,10 @@ class ApiManager {
         return status;
     }
 
+    /**
+     * 사용자 프로필(UserProfile)을 서버에서 가져오는 함수
+     * @returns UserProfile
+     */
     static async getUserProfile() {
         let response = await fetch(Constant.API_DOMAIN + "/user/profile", this.getFetchHeaders());
         let json = await response.json();
@@ -116,7 +132,7 @@ class ApiManager {
     }
 
     /**
-     * UserProfile을 서버에 저장하는 함수
+     * 사용자 프로필(UserProfile)을 서버에 저장하는 함수
      * @param {UserProfile} userProfile 
      * @param {list<string>} updateColumn 
      */
