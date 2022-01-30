@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
+import DatePicker from "react-native-date-picker";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Colors from "../common/Colors";
 import Goal from "../common/Goal";
@@ -38,7 +39,8 @@ class ReportScreen extends React.Component {
             startDate,          // 해당주의 시작일 or 해당월의 시작일
             startDateString,    // 해당주의 시작일 or 해당월의 시작일 (문자열)
             dateCount: 7,       // 7 or 29~31
-            report: {}
+            report: {},
+            showDatePicker: false
         };
     }
 
@@ -63,6 +65,43 @@ class ReportScreen extends React.Component {
         this.unsubscribe();
     }
 
+    /**
+     * 데이트를
+     * @param {Date} date 
+     */
+    updateReportByDate(date) {
+        let startDate = date;
+        let dateCount = 7;
+
+        if (this.state.unit == "month") {
+            startDate.setDate(1);
+            dateCount = DateUtils.getLastDayOfMonth(startDate.getFullYear(), startDate.getMonth() + 1);
+        }
+        else {
+            startDate = DateUtils.getFirstDayOfWeek(date);
+        }
+
+        let startDateString = DateUtils.dateToFormattedString(startDate);
+        let weekNumberObj = DateUtils.getWeekNumberByMonth(startDate);
+        let targetYear = weekNumberObj.year;
+        let targetMonth = weekNumberObj.month;
+        let targetWeek = weekNumberObj.weekNo;
+
+        this.setState({
+            targetYear,         // 해당년
+            targetMonth,        // 헤달월
+            targetWeek,         // 해당주가 몇 주인지 or 1
+            startDate,          // 해당주의 시작일 or 해당월의 시작일
+            startDateString,    // 해당주의 시작일 or 해당월의 시작일 (문자열)
+            dateCount
+        }, this.updateReport(startDateString, dateCount));
+    }
+
+    /**
+     * 시작 날짜와 날짜 수를 기반으로 리포트를 업데이트하는 함수
+     * @param {string} startDate 
+     * @param {number} dateCount 
+     */
     updateReport(startDate, dateCount) {
         ApiManager.getUserGoalListByDate(startDate, dateCount, ["success"])
             .then(userGoalListByDate => {
@@ -138,6 +177,15 @@ class ReportScreen extends React.Component {
         this.updateReport(startDateString, dateCount);
     }
 
+    onConfirmDatePicker(date) {
+        this.setState({ showDatePicker: false });
+        this.updateReportByDate(date)
+    }
+
+    onCancelDatePicker() {
+        this.setState({ showDatePicker: false });
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -163,7 +211,9 @@ class ReportScreen extends React.Component {
                         <Image style={styles.monthSelectorButtonImage} source={require("../../img/left_arrow.png")} />
                     </TouchableOpacity>
 
-                    <Text style={styles.currentMonth}>{this.state.targetYear}년 {this.state.targetMonth}월{this.state.unit == "week" ? ` ${this.state.targetWeek}주` : ""}</Text>
+                    <TouchableOpacity activeOpacity={Styles.activeOpacity} onPress={() => { this.setState({ showDatePicker: true }); }}>
+                        <Text style={styles.currentMonth}>{this.state.targetYear}년 {this.state.targetMonth}월{this.state.unit == "week" ? ` ${this.state.targetWeek}주` : ""}</Text>
+                    </TouchableOpacity>
 
                     <TouchableOpacity style={styles.monthSelectorButton} activeOpacity={Styles.activeOpacity} onPress={this.onPressMonthSelectorButton.bind(this, 1)}>
                         <Image style={styles.monthSelectorButtonImage} source={require("../../img/right_arrow.png")} />
@@ -315,6 +365,22 @@ class ReportScreen extends React.Component {
                         </View>
                     </View>
                 </ScrollView>
+
+                {/* 날짜 선택기 */}
+                {this.state.showDatePicker && (
+                    <DatePicker
+                        modal
+                        mode="date"
+                        open={this.state.showDatePicker}
+                        date={this.state.startDate}
+                        onConfirm={this.onConfirmDatePicker.bind(this)}
+                        onCancel={this.onCancelDatePicker.bind(this)}
+                        androidVariant="iosClone"
+                        title="날짜 선택"
+                        confirmText="확인"
+                        cancelText="취소"
+                    />
+                )}
             </View>
         );
     }

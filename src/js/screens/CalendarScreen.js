@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
+import DatePicker from "react-native-date-picker";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Colors from "../common/Colors";
 import Styles from "../common/Styles";
@@ -29,7 +30,8 @@ class CalendarScreen extends React.Component {
             targetDate: currentDate,
             targetDateString: currentDateString,
             userGoalListByDate: {},
-            userGoalList: []
+            userGoalList: [],
+            showDatePicker: false
         };
     }
 
@@ -172,9 +174,6 @@ class CalendarScreen extends React.Component {
     onChangeUserGoalSuccess(userGoal) {
         console.log(`MainPage.onChangeUserGoalSuccess: ${userGoal.getSuccess()} (${GoalManager.getGoalById(userGoal.getGoalId()).getName()})`);
 
-        let goalId = userGoal.getGoalId();
-        let goal = GoalManager.getGoalById(userGoal.getGoalId());
-
         // 빠른 내용 적용
         let userGoalListByDate = this.state.userGoalListByDate;
         userGoalListByDate[this.state.targetDateString] = this.state.userGoalList;
@@ -194,6 +193,17 @@ class CalendarScreen extends React.Component {
     onPressDiaryDayElement(date) {
         this.updateUserGoalContent(date);
         console.log(`CalendarScreen.onPressDiaryDayElement: ${date}`);
+    }
+
+    onConfirmDatePicker(date) {
+        this.setState({ showDatePicker: false });
+        this.updateCalendar(date.getFullYear(), date.getMonth() + 1);
+        this.updateUserGoalContent(DateUtils.dateToFormattedString(date));
+    }
+
+
+    onCancelDatePicker() {
+        this.setState({ showDatePicker: false });
     }
 
     render() {
@@ -235,7 +245,9 @@ class CalendarScreen extends React.Component {
                             <Image style={styles.monthSelectorButtonImage} source={require("../../img/left_arrow.png")} />
                         </TouchableOpacity>
 
-                        <Text style={styles.currentMonth}>{this.state.targetYear}년 {this.state.targetMonth}월</Text>
+                        <TouchableOpacity activeOpacity={Styles.activeOpacity} onPress={() => { this.setState({ showDatePicker: true }) }}>
+                            <Text style={styles.currentMonth}>{this.state.targetYear}년 {this.state.targetMonth}월</Text>
+                        </TouchableOpacity>
 
                         <TouchableOpacity style={styles.monthSelectorButton} activeOpacity={Styles.activeOpacity} onPress={this.onPressMonthSelectorButton.bind(this, 1)}>
                             <Image style={styles.monthSelectorButtonImage} source={require("../../img/right_arrow.png")} />
@@ -315,6 +327,22 @@ class CalendarScreen extends React.Component {
                             </View>
                     }
                 </ScrollView>
+
+                {/* 날짜 선택기 */}
+                {this.state.showDatePicker && (
+                    <DatePicker
+                        modal
+                        mode="date"
+                        open={this.state.showDatePicker}
+                        date={this.state.targetDate}
+                        onConfirm={this.onConfirmDatePicker.bind(this)}
+                        onCancel={this.onCancelDatePicker.bind(this)}
+                        androidVariant="iosClone"
+                        title="날짜 선택"
+                        confirmText="확인"
+                        cancelText="취소"
+                    />
+                )}
             </View>
         );
     }
