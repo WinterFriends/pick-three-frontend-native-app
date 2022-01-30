@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Linking } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import SettingElement from "../components/SettingElement";
 import StatusBar from "../components/StatusBar";
@@ -7,6 +7,7 @@ import AccountManager from "../managers/AccountManager";
 import Colors from "../common/Colors";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Styles from "../common/Styles";
+import Constant from "../common/Constant";
 
 const socialImage = {
     "google": require("../../img/social_google.png")
@@ -86,10 +87,10 @@ class SettingScreen extends React.Component {
                     </View>
 
                     {/* 버튼 */}
-                    <SettingElement title="공지사항" />
-                    <SettingElement title="서비스 이용약관" />
-                    <SettingElement title="개인정보처리방침" />
-                    <SettingElement title="문의하기" />
+                    <SettingElement onPress={() => { Linking.openURL(Constant.PICKPLE_DOMAIN + "/notice.html") }} title="공지사항" />
+                    <SettingElement onPress={() => { Linking.openURL(Constant.PICKPLE_DOMAIN + "/policies/service.html") }} title="서비스 이용약관" />
+                    <SettingElement onPress={() => { Linking.openURL(Constant.PICKPLE_DOMAIN + "/policies/privacy.html") }} title="개인정보처리방침" />
+                    <SettingElement onPress={() => { Linking.openURL(Constant.PICKPLE_DOMAIN + "/support.html") }} title="문의하기" />
 
                     <View style={styles.secantLineContainer}>
                         <View style={styles.secantLine}></View>
