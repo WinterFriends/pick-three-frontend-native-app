@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
+import DoubleClick from "react-native-double-click-instagram";
 import Colors from "../common/Colors";
 import Styles from "../common/Styles";
-
 class UserGoalListElement extends React.Component {
     constructor(props) {
         console.log(`UserGoalListElement.constructor: goalName="${props.goal.getName()}"`);
@@ -30,17 +30,19 @@ class UserGoalListElement extends React.Component {
 
     render() {
         return (
-            <TouchableOpacity activeOpacity={Styles.activeOpacity} style={styles.container} onPress={this.onPress.bind(this)}>
-                <Image style={styles.goalIcon} source={{ uri: this.userGoal.getSuccess() ? this.goal.getActiveIcon() : this.goal.getInactiveIcon() }} />
-                <View style={styles.goalContent}>
-                    <Text style={{ ...styles.goalName, marginTop: this.checkUserGoalDiaryEmpty() ? 0 : 6 }}>{this.goal.getName()}</Text>
-                    {
-                        this.checkUserGoalDiaryEmpty()
-                            ? null
-                            : <Text style={styles.goalDiary}>{this.userGoal.getDiary()}</Text>
-                    }
+            <DoubleClick icon doubleClick={this.onPress.bind(this)}>
+                <View style={styles.container}>
+                    <Image style={styles.goalIcon} source={{ uri: this.userGoal.getSuccess() ? this.goal.getActiveIcon() : this.goal.getInactiveIcon() }} />
+                    <View style={styles.goalContent}>
+                        <Text style={{ ...styles.goalName, marginTop: this.checkUserGoalDiaryEmpty() ? 0 : 6 }}>{this.goal.getName()}</Text>
+                        {
+                            this.checkUserGoalDiaryEmpty()
+                                ? null
+                                : <Text style={styles.goalDiary}>{this.userGoal.getDiary()}</Text>
+                        }
+                    </View>
                 </View>
-            </TouchableOpacity >
+            </DoubleClick>
         );
     }
 }
