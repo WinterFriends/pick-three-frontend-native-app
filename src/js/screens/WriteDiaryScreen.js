@@ -20,10 +20,10 @@ class WriteDiaryScreen extends React.Component {
         let date = DateUtils.formattedStringToDate(dateString);
 
         this.state = {
+            userGoalList: props.route.params.userGoalList,
             dateString: dateString,
             date: date
         }
-        this.userGoalList = props.route.params.userGoalList;
     }
 
     onPressBackButton() {
@@ -31,7 +31,7 @@ class WriteDiaryScreen extends React.Component {
     }
 
     onPressConfirmButton() {
-        ApiManager.setUserGoalDetailByDate(this.props.route.params.date, this.userGoalList, ["diary"])
+        ApiManager.setUserGoalDetailByDate(this.props.route.params.date, this.state.userGoalList, ["diary"])
             .then(status => this.props.navigation.goBack(null));
     }
 
@@ -58,7 +58,7 @@ class WriteDiaryScreen extends React.Component {
 
                 <ScrollView style={styles.userGoalDiaryList} contentContainerStyle={styles.userGoalDiaryListContainer}>
                     {
-                        this.userGoalList.map(userGoal => {
+                        this.state.userGoalList.map(userGoal => {
                             return <UserGoalDiaryElement
                                 key={this.key++}
                                 userGoal={userGoal}
