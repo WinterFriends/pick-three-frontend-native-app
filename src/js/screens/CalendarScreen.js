@@ -170,11 +170,21 @@ class CalendarScreen extends React.Component {
     * @param {userGoal} userGoal 
     */
     onChangeUserGoalSuccess(userGoal) {
-        let goal = GoalManager.getGoalById(userGoal.getGoalId());
-        ApiManager.setUserGoalDetailByDate(this.state.targetDateString, this.state.userGoalList, ["success"])
-            .then(status => this.updateCalendar(this.state.targetYear, this.state.targetMonth));
+        console.log(`MainPage.onChangeUserGoalSuccess: ${userGoal.getSuccess()} (${GoalManager.getGoalById(userGoal.getGoalId()).getName()})`);
 
-        console.log(`MainPage.onChangeUserGoalSuccess: ${userGoal.getSuccess()} (${goal.getName()})`);
+        let goalId = userGoal.getGoalId();
+        let goal = GoalManager.getGoalById(userGoal.getGoalId());
+
+        // 빠른 내용 적용
+        let userGoalListByDate = this.state.userGoalListByDate;
+        userGoalListByDate[this.state.targetDateString] = this.state.userGoalList;
+        this.setState({
+            userGoalListByDate: { ...userGoalListByDate }
+        });
+
+        // // 서버 내용 적용
+        ApiManager.setUserGoalDetailByDate(this.state.targetDateString, this.state.userGoalList, ["success"]);
+        //     .then(status => this.updateCalendar(this.state.targetYear, this.state.targetMonth));
     }
 
     /**
