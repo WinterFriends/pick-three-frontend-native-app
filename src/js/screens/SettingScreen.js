@@ -8,16 +8,34 @@ import Colors from "../common/Colors";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Styles from "../common/Styles";
 
+const socialImage = {
+    "google": require("../../img/social_google.png")
+}
+
 class SettingScreen extends React.Component {
     constructor(props) {
         super(props);
+
+        let userProfile = AccountManager.getUserProfile();
+
+        this.state = {
+            name: userProfile.getName(),
+            email: userProfile.getEmail(),
+            social: userProfile.getSocial()
+        }
     }
 
     onPressUpdateProfile() {
         console.log("SettingScreen.onPressUpdateProfile");
         let unsubscribe = this.props.navigation.addListener('focus', () => {
             console.log("SettingScreen.onFocus: onPressUpdateProfile");
-            unsubscribe();
+
+            let userProfile = AccountManager.getUserProfile();
+            this.setState({
+                name: userProfile.getName(),
+                email: userProfile.getEmail(),
+                social: userProfile.getSocial()
+            }, unsubscribe());
         });
         this.props.navigation.navigate("EditProfileScreen", { goBackAble: true });
     }
@@ -52,14 +70,18 @@ class SettingScreen extends React.Component {
                     <View style={styles.profileContainer}>
                         <SettingElement
                             title={
-                                <Text style={Styles.textStyle.body05}><Text style={{ ...Styles.textStyle.subtitle01, fontSize: 24 }}>{AccountManager.getUserName()}</Text>님</Text>
+                                <Text style={Styles.textStyle.body05}>
+                                    <Text style={{ ...Styles.textStyle.subtitle01, fontSize: 24 }}>
+                                        {this.state.name}
+                                    </Text>님
+                                </Text>
                             }
                             onPress={this.onPressUpdateProfile.bind(this)} />
 
                         {/* 소셜 정보 */}
                         <View style={styles.socialContainer}>
-                            <Image style={styles.socialIcon} source={require(`../../img/social_${"google"}.png`)} />
-                            <Text style={styles.socialEmail}>{AccountManager.getUserEmail()}</Text>
+                            <Image style={styles.socialIcon} source={socialImage[this.state.social]} />
+                            <Text style={styles.socialEmail}>{this.state.email}</Text>
                         </View>
                     </View>
 

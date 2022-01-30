@@ -7,6 +7,7 @@ import StatusBar from "../components/StatusBar";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Colors from "../common/Colors";
 import Styles from "../common/Styles";
+import ApiManager from "../managers/ApiManager";
 
 GoogleSignin.configure({
     webClientId: "727563278880-89dkcgmm187dok7osr5c1cmjd85dhol3.apps.googleusercontent.com",
@@ -27,12 +28,7 @@ class LoginScreen extends React.Component {
             // 구글 로그인
             await GoogleSignin.hasPlayServices();
 
-            const userInfo = await GoogleSignin.signIn();
-            console.log(userInfo);
-            AccountManager.setUserName(userInfo.user.name);
-            AccountManager.setUserEmail(userInfo.user.email);
-            AccountManager.setUserPhoto(userInfo.user.photo);
-            AccountManager.saveUserInfo();
+            await GoogleSignin.signIn();
 
             const tokens = await GoogleSignin.getTokens();
             const idToken = tokens.idToken;
@@ -44,12 +40,20 @@ class LoginScreen extends React.Component {
             AccountManager.setTokenSet(tokenSet);
             AccountManager.saveTokenSet();
 
+            // 정상 로그인 확인
             let accessToken = AccountManager.getAccessToken();
             if (accessToken == null) {
                 return console.log("LoginScreen.signIn: Login failed");
             }
 
-            this.props.navigation.replace("SplashScreen");
+            // 프로필 저장 및 화면 전환
+            ApiManager.getUserProfile()
+                .then(userProfile => {
+                    console.log(userProfile.toJson());
+                    AccountManager.setUserProfile(userProfile);
+                    AccountManager.saveUserProfile()
+                        .then(this.props.navigation.replace("SplashScreen"));
+                });
         }
         catch (error) {
             console.log(error);

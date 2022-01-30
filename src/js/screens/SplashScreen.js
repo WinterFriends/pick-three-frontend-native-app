@@ -41,7 +41,7 @@ class SplashScreen extends React.Component {
         AccountManager.loadTokenSet()
             .then(logedin => {
                 if (logedin) {
-                    AccountManager.loadUserInfo()
+                    AccountManager.loadUserProfile()
                         .then(
                             ApiManager.getGoalList()
                                 .then(goalList => {

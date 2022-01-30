@@ -1,4 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserProfile from "../common/UserProfile";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class AccountManager {
     static _isLogedin = false;
@@ -82,74 +83,46 @@ class AccountManager {
     }
 
     /* UserInfo */
+    static _userProfile = new UserProfile();
     static _userInfo = {
         name: "",
         email: "",
         photo: ""
     };
 
-    static _setUserInfo(userInfo) {
-        this._userInfo = Object.freeze(userInfo);
-        console.log(`AccountManager._setUserInfo: name="${userInfo.name}"`);
+    static setUserProfile(userProfile) {
+        this._userProfile = userProfile;
     }
 
-    static _updateUserInfo(key, value) {
-        let newUserInfo = { ...this._userInfo, [key]: value };
-        this._setUserInfo(newUserInfo);
+    static getUserProfile() {
+        return this._userProfile;
     }
 
-    static async saveUserInfo() {
+    static async loadUserProfile() {
         try {
-            return await AsyncStorage.setItem("userInfo", JSON.stringify(this._userInfo));
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
-
-    static async loadUserInfo() {
-        try {
-            let jsonString = await AsyncStorage.getItem("userInfo");
-
+            let jsonString = await AsyncStorage.getItem("userProfile");
             if (jsonString == null) return null;
 
             let json = JSON.parse(jsonString);
 
-            this._setUserInfo(json);
+            let userProfile = UserProfile.fromJson(json);
+            this.setUserProfile(userProfile);
 
-            return json;
+            return userProfile;
         }
         catch (err) {
             console.log(err);
         }
     }
 
-    static setUserName(name) {
-        this._updateUserInfo("name", name);
-    }
-
-    static setUserEmail(email) {
-        this._updateUserInfo("email", email);
-    }
-
-    static setUserPhoto(photo) {
-        this._updateUserInfo("photo", photo);
-    }
-
-    static getUserInfo() {
-        return this._userInfo;
-    }
-
-    static getUserName() {
-        return this._userInfo["name"];
-    }
-
-    static getUserEmail() {
-        return this._userInfo["email"];
-    }
-
-    static getUserPhoto() {
-        return this._userInfo["photo"];
+    static async saveUserProfile() {
+        try {
+            let jsonString = JSON.stringify(this._userProfile.toJson());
+            return await AsyncStorage.setItem("userProfile", jsonString);
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 }
 
