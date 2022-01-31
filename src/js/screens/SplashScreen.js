@@ -1,6 +1,7 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, View, Text, Button, Image } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
+import Colors from "../common/Colors";
 import Styles from "../common/Styles";
 import StatusBar from "../components/StatusBar";
 import AccountManager from "../managers/AccountManager"
@@ -87,6 +88,7 @@ const styles = StyleSheet.create({
         height: "100%",
         paddingTop: getStatusBarHeight(),
         justifyContent: "center",
+        backgroundColor: Colors.white
     },
     titleContainer: {
         alignItems: "center"
