@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View, Text, Button, Image } from "react-native";
+import { StyleSheet, View, Text, Image, Linking, TouchableOpacity } from "react-native";
 import { GoogleSignin, GoogleSigninButton } from "@react-native-google-signin/google-signin";
 import Constant from "../common/Constant";
 import AccountManager from "../managers/AccountManager"
@@ -68,14 +68,30 @@ class LoginScreen extends React.Component {
                 <Text style={styles.title}>Pickple</Text>
                 <Text style={styles.welcome}>소셜 계정으로 빠르게 시작해보세요</Text>
 
+                <TouchableOpacity style={{ marginBottom: 32 /*17*/ }} activeOpacity={Styles.activeOpacity} onPress={this.signIn.bind(this)}>
+                    <View style={styles.loginButton}>
+                        <Image style={{ ...styles.loginButtonImage, width: 16, height: 16 }} source={require("../../img/login_google.png")} />
+                        <Text style={styles.loginButtonText}>Google 계정으로 시작하기</Text>
+                    </View>
+                </TouchableOpacity>
 
-                <GoogleSigninButton
-                    style={{ width: "100%", height: 50, marginBottom: 30 }}
-                    size={GoogleSigninButton.Size.Wide}
-                    color={GoogleSigninButton.Color.Light}
-                    onPress={this.signIn.bind(this)} />
+                {
+                    false &&
+                    <TouchableOpacity style={{ marginBottom: 32 }} activeOpacity={Styles.activeOpacity} onPress={this.signIn.bind(this)}>
+                        <View style={styles.loginButton}>
+                            <Image style={{ ...styles.loginButtonImage, width: 15, height: 18 }} source={require("../../img/login_apple.png")} />
+                            <Text style={styles.loginButtonText}>Apple 계정으로 시작하기</Text>
+                        </View>
+                    </TouchableOpacity>
+                }
 
-                <Text style={styles.notice}>회원 가입 시, 이용약관 및 개인정보처리방침에 동의한 것으로 간주합니다.</Text>
+                <Text style={styles.notice}>
+                    회원 가입 시,{" "}
+                    <Text style={styles.underLine} onPress={() => { Linking.openURL(Constant.PICKPLE_DOMAIN + "/policies/service.html") }}>서비스 이용약관</Text>
+                    {" "}및{" "}
+                    <Text style={styles.underLine} onPress={() => { Linking.openURL(Constant.PICKPLE_DOMAIN + "/policies/privacy.html") }}>개인정보처리방침</Text>
+                    에 동의한 것으로 간주합니다.
+                </Text>
                 <StatusBar style="light" />
             </View>
         );
@@ -108,8 +124,30 @@ const styles = StyleSheet.create({
     },
     notice: {
         ...Styles.textStyle.body01,
-        color: Colors.black03,
+        color: Colors.gray03,//black03,
         marginBottom: 90
+    },
+    underLine: {
+        textDecorationLine: "underline"
+    },
+
+    // 로그인 버튼
+    loginButton: {
+        flexDirection: "row",
+        width: "100%",
+        paddingVertical: 16,
+        borderRadius: 12,
+        alignItems: "center",
+        backgroundColor: Colors.white
+    },
+    loginButtonImage: {
+        position: "absolute",
+        left: 27
+    },
+    loginButtonText: {
+        flex: 1,
+        ...Styles.textStyle.subtitle01,
+        textAlign: "center"
     }
 });
 
