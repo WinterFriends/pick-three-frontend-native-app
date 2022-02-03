@@ -50,7 +50,7 @@ class LoginScreen extends React.Component {
                     console.log(userProfile.toJson());
                     AccountManager.setUserProfile(userProfile);
                     AccountManager.saveUserProfile()
-                        .then(this.props.navigation.replace("SplashScreen"));
+                        .then(this.props.navigation.replace("SplashScreen", { targetPage: "EditProfileScreen" }));
                 });
         }
         catch (error) {
