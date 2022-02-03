@@ -28,6 +28,24 @@ class ApiManager {
         return tokenSet;
     }
 
+    static async refreshToken(refreshToken) {
+        let data = JSON.stringify({
+            refreshToken
+        });
+
+        let options = {
+            method: "POST",
+            ...this.getFetchHeaders(),
+            body: data
+        };
+
+        let uri = Constant.API_DOMAIN + "/token/f";
+        let response = await fetch(uri, options);
+        const tokenSet = await response.json();
+
+        return tokenSet;
+    }
+
     /**
      * 정의된 Goal을 불러오는 함수
      * @returns Goal이 들어있는 리스트
@@ -151,6 +169,19 @@ class ApiManager {
         };
 
         let uri = Constant.API_DOMAIN + "/user/profile";
+        let response = await fetch(uri, options);
+        let status = response.status;
+
+        return status;
+    }
+
+    static async deleteAccount() {
+        let options = {
+            method: "POST",
+            ...this.getFetchHeaders()
+        };
+
+        let uri = Constant.API_DOMAIN + "/user/delete";
         let response = await fetch(uri, options);
         let status = response.status;
 
