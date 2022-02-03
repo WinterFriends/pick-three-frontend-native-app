@@ -30,7 +30,7 @@ class ApiManager {
 
     static async refreshToken(refreshToken) {
         let data = JSON.stringify({
-            refreshToken
+            refresh: refreshToken
         });
 
         let options = {

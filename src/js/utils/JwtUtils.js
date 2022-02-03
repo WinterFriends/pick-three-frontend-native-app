@@ -1,15 +1,15 @@
 import jwt_decode from "jwt-decode";
 
 class JwtUtils {
-    static getTokenState(accessToken, refreshToken) {
+    static getTokenState(accessToken, refreshToken, offsetDay = 1) {
         let decodedAccessToken = jwt_decode(accessToken);
         let accessTokenExp = decodedAccessToken.exp * 1000;
         let decodedRefreshToken = jwt_decode(refreshToken);
-        let refreshTokenExp = decodedAccessToken.exp * 1000;
+        let refreshTokenExp = decodedRefreshToken.exp * 1000;
 
         let now = new Date().getTime();
 
-        let offset = (24 * 60 * 60 * 1000) * 3;    // 3일 
+        let offset = (24 * 60 * 60 * 1000) * offsetDay;    // 3일 
 
         let state = TokenState.None;
 
