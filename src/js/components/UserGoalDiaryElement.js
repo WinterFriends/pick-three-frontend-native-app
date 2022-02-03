@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
         marginTop: 3
     },
     diaryInput: {
+        ...Styles.textStyle.body02,
         minHeight: 100,
         marginBottom: 3,
         padding: 17,

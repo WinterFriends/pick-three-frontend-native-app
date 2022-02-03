@@ -23,10 +23,7 @@ class EditProfileScreen extends React.Component {
 
         console.log(`EditProfileScreen.goBack: goBackAble = ${goBackAble}`);
 
-        if (goBackAble)
-            this.props.navigation.goBack(null);
-        else
-            this.props.navigation.navigate("TabNavigationScreen");
+        this.props.navigation.navigate("TabNavigationScreen");
     }
 
     onPressCancelButton() {

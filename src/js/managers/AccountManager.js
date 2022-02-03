@@ -79,6 +79,7 @@ class AccountManager {
     }
 
     static logout() {
+        this.setTokenSet({});
         AsyncStorage.setItem("tokenSet", JSON.stringify({}));
     }
 

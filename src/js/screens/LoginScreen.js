@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, Image, Linking, TouchableOpacity } from "react-native";
-import { GoogleSignin, GoogleSigninButton } from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Constant from "../common/Constant";
 import AccountManager from "../managers/AccountManager"
 import StatusBar from "../components/StatusBar";

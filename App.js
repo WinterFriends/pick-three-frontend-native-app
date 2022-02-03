@@ -10,12 +10,17 @@ import EditProfileScreen from "./src/js/screens/EditProfileScreen";
 import { View, Text, LogBox } from "react-native";
 import React from "react";
 
+
+/*
 LogBox.ignoreLogs([
   "Non-serializable",               // 다이어리 화면
   "Animated: `useNativeDriver`",    // 더블 클릭
   "Can't perform a React",          // 더블 클릭
   "Possible Unhandled",             // 인터넷 연결 실패
 ]);
+*/
+
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 
