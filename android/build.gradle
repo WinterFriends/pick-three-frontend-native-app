@@ -7,6 +7,7 @@ buildscript {
         compileSdkVersion = 30
         targetSdkVersion = 30
         googlePalyServicesAuthVersion = "17.0.0"
+        androidXCore = "1.7.0"
     }
     repositories {
         google()
