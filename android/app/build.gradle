@@ -172,6 +172,9 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+
+            //배포 최적화
+            shrinkResources enableProguardInReleaseBuilds
         }
     }
 
