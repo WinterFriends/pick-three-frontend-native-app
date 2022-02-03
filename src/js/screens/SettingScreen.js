@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Linking } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Linking, Alert } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import SettingElement from "../components/SettingElement";
 import StatusBar from "../components/StatusBar";
@@ -8,6 +8,7 @@ import Colors from "../common/Colors";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Styles from "../common/Styles";
 import Constant from "../common/Constant";
+import ApiManager from "../managers/ApiManager";
 
 const socialImage = {
     "google": require("../../img/social_google.png")
@@ -50,7 +51,35 @@ class SettingScreen extends React.Component {
     }
 
     onPressDeleteAccount() {
-        console.log("SettingScreen.onPressDeleteAccount");
+        let alert = (msg, callback) => Alert.alert(
+            "계정 삭제",
+            msg,
+            [
+                {
+                    text: "아니오",
+                    style: "cancel"
+                },
+                {
+                    text: "예",
+                    onPress: () => { callback() }
+                }
+            ],
+            {
+                cancelable: true
+            });
+
+        alert("계정을 삭제하시겠습니까?\n계정 삭제 시, 모든 데이터를 복구할 수 없습니다.", () => {
+            alert("정말 진짜로 삭제하시겠습니까?", () => {
+                ApiManager.deleteAccount()
+                    .then(() => {
+                        GoogleSignin.signOut()
+                            .then(() => {
+                                AccountManager.logout();
+                                this.props.navigation.replace("LoginScreen");
+                            });
+                    });
+            })
+        })
     }
 
     render() {
