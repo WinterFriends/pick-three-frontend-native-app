@@ -1,3 +1,4 @@
+import React from "react";
 import * as SplashScreenExpo from 'expo-splash-screen';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -7,8 +8,8 @@ import TabNavigationScreen from "./src/js/screens/TabNavigationScreen";
 import SelectGoalScreen from "./src/js/screens/SelectGoalScreen";
 import WriteDiaryScreen from "./src/js/screens/WriteDiaryScreen";
 import EditProfileScreen from "./src/js/screens/EditProfileScreen";
-import { View, Text, LogBox } from "react-native";
-import React from "react";
+import ManualScreen from './src/js/screens/ManualScreen';
+import { LogBox } from "react-native";
 
 
 /*
@@ -36,6 +37,7 @@ class App extends React.Component {
         <Stack.Navigator>
           <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="ManualScreen" component={ManualScreen} options={{ headerShown: false }} />
           <Stack.Screen name="TabNavigationScreen" component={TabNavigationScreen} options={{ headerShown: false }} />
           <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} options={{ headerShown: false }} />
           <Stack.Screen name="SelectGoalScreen" component={SelectGoalScreen} options={{ headerShown: false }} />

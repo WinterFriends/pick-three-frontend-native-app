@@ -50,7 +50,7 @@ class LoginScreen extends React.Component {
                     console.log(userProfile.toJson());
                     AccountManager.setUserProfile(userProfile);
                     AccountManager.saveUserProfile()
-                        .then(this.props.navigation.replace("SplashScreen", { targetPage: "EditProfileScreen" }));
+                        .then(() => { this.props.navigation.replace("SplashScreen", { targetPage: "ManualScreen" }) });
                 });
         }
         catch (error) {
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
         marginBottom: 50
     },
     notice: {
-        ...Styles.textStyle.body01,
+        ...Styles.textStyle.body03,
         color: Colors.gray03,//black03,
         marginBottom: 90
     },
