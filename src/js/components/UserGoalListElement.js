@@ -34,7 +34,7 @@ class UserGoalListElement extends React.Component {
                 <View style={styles.container}>
                     <Image style={styles.goalIcon} source={{ uri: this.userGoal.getSuccess() ? this.goal.getActiveIcon() : this.goal.getInactiveIcon() }} />
                     <View style={styles.goalContent}>
-                        <Text style={{ ...styles.goalName, marginTop: this.checkUserGoalDiaryEmpty() ? 0 : 6 }}>{this.goal.getName()}</Text>
+                        <Text style={{ ...styles.goalName, marginTop: this.checkUserGoalDiaryEmpty() ? 0 : -4 }}>{this.goal.getName()}</Text>
                         {
                             this.checkUserGoalDiaryEmpty()
                                 ? null
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         width: "100%",
         marginBottom: 15,
-        padding: 24,
+        paddingVertical: 14,
+        paddingHorizontal: 20,
         borderRadius: 10,
         backgroundColor: Colors.white
     },
@@ -70,7 +71,8 @@ const styles = StyleSheet.create({
     },
     goalDiary: {
         ...Styles.textStyle.body02,
-        marginTop: 10
+        marginTop: 9,
+        marginBottom: 2
     },
 });
 

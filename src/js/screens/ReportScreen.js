@@ -253,7 +253,7 @@ class ReportScreen extends React.Component {
                                         return (
                                             <View key={this.key++} style={styles.goalSuccessIconGroup}>
                                                 <Image style={styles.goalIcon} source={{ uri: goal.getIcon() }} />
-                                                <Text style={styles.goalPercent}>{goal.getName()}</Text>
+                                                <Text style={styles.goalPercent}>{count ? `${Math.floor(count / this.state.report.success.totalCount * 100)}%` : "0%"}</Text>
                                                 <Text style={styles.goalCount}>{count}일</Text>
                                             </View>
                                         );

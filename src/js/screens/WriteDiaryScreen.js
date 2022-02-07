@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     // 확인 버튼
     confirmButton: {
         width: "100%",
-        paddingVertical: 20,
+        paddingVertical: 26,
         alignItems: "center",
         backgroundColor: Colors.primary01
     },

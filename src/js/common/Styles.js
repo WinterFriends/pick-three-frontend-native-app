@@ -30,7 +30,8 @@ class Styles {
         },
         body02: {
             fontFamily: "Pretendard-Regular",
-            fontSize: 13
+            fontSize: 13,
+            lineHeight: 18
         },
         body03: {
             fontFamily: "Pretendard-Regular",

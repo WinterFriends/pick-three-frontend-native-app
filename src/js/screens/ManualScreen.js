@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
     itemDescription: {
         paddingLeft: 35,
         fontFamily: "Pretendard-Regular",
-        fontSize: 25
+        fontSize: 25,
+        lineHeight: 35
     },
     itemDescriptionBold: {
         fontFamily: "Pretendard-SemiBold",
