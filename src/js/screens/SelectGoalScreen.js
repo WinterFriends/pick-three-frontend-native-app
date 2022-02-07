@@ -103,13 +103,13 @@ class SelectGoalScreen extends React.Component {
                         this.state.selectedGoalIdList.length === 0
                             ? <Text style={styles.confirmButtonText}>오늘의 목표를 선택해주세요</Text>
                             : <Text style={styles.confirmButtonText}>오늘의 {
-                                this.state.selectedGoalIdList.length == 3
+                                this.state.selectedGoalIdList.length >= 3
                                     ? <Text style={styles.confirmButtonTextBold}>세 가지</Text>
                                     : this.state.selectedGoalIdList.length == 2
                                         ? <Text style={styles.confirmButtonTextBold}>두 가지</Text>
                                         : this.state.selectedGoalIdList.length == 1
                                             ? <Text style={styles.confirmButtonTextBold}>한 가지</Text>
-                                            : null
+                                            : ""
                             } 선택 완료!</Text>
                     }
 
