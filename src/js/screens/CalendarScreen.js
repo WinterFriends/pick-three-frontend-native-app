@@ -217,7 +217,7 @@ class CalendarScreen extends React.Component {
                             this.checkSelectGoal()
                                 ? <TouchableOpacity
                                     activeOpacity={Styles.activeOpacity}
-                                    style={{ ...styles.button, marginRight: 13, marginLeft: "auto" }}
+                                    style={{ ...styles.button, marginRight: 25, marginLeft: "auto" }}
                                     onPress={this.onPressWriteDiaryButton.bind(this)}>
                                     <Image title="Write Diary" source={require("../../img/write_diary_btn.png")} style={styles.buttonImage} />
                                 </TouchableOpacity>
