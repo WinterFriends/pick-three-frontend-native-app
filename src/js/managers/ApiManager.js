@@ -22,7 +22,7 @@ class ApiManager {
      * @returns tokenSet
      */
     static async loginByGoogle(idToken) {
-        let wintyLoginUri = Constant.API_DOMAIN + "/login/google";
+        let wintyLoginUri = Constant.API_DOMAIN + "/login/google/";     // 안드로이드에서는 괜찮은데, ios에서 트레일링 슬래시를 안붙이면 오류남. 그것도 로그인만..
         let response = await fetch(wintyLoginUri, { headers: { "Authorization": idToken } });
         const tokenSet = await response.json();
         return tokenSet;

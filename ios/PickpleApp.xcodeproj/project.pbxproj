@@ -13,8 +13,21 @@
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		77039483260E419F919DF30B /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E01A5993DB4C468BAD4718 /* noop-file.swift */; };
 		96905EF65AED1B983A6B3ABC /* libPods-PickpleApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-PickpleApp.a */; };
+		A300549427C4B4E6004D4CFB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A300549327C4B4E6004D4CFB /* GoogleService-Info.plist */; };
+		A300549627C4B5E0004D4CFB /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = A300549527C4B5E0004D4CFB /* Fonts */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		2471377155C14D5F971C3CC6 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 32E725195CDB4779B440B66C /* Montserrat-Bold.ttf */; };
+		B14C9DD3F5634C338EDEEFE7 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B40C0B76F00A49BD85E0D93F /* Montserrat-Regular.ttf */; };
+		2226142D4987462B95A64A01 /* Pretendard-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 58215849B5B8468084463F17 /* Pretendard-Black.ttf */; };
+		F08F296E54784126890E584F /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B19A96135FF416E833865F9 /* Pretendard-Bold.ttf */; };
+		F1E62A6BEF594B0DA9ACB37F /* Pretendard-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B948FF726F78414D96FB1891 /* Pretendard-ExtraBold.ttf */; };
+		B422A5799D1746E0B949E035 /* Pretendard-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C66B61D518664C42878D2C74 /* Pretendard-ExtraLight.ttf */; };
+		4F04A3C15B5145C79E0CB1F1 /* Pretendard-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A0A60C93E4324F0B8BA0D082 /* Pretendard-Light.ttf */; };
+		55A935C43C064E6E892F8199 /* Pretendard-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9B7E16C2A6B94B9395EFDEA9 /* Pretendard-Medium.ttf */; };
+		99ACA765B1BE4DA3AA610784 /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 248E303D7ECF4DBDA075F3C5 /* Pretendard-Regular.ttf */; };
+		48BCCA3B860D4E1E8C51765B /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 600CAE987E944A6F8CB6BE8B /* Pretendard-SemiBold.ttf */; };
+		73464AA875224B288BF18F76 /* Pretendard-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5F51B2A614D141B4A6237F84 /* Pretendard-Thin.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,11 +42,24 @@
 		6C2E3173556A471DD304B334 /* Pods-PickpleApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PickpleApp.debug.xcconfig"; path = "Target Support Files/Pods-PickpleApp/Pods-PickpleApp.debug.xcconfig"; sourceTree = "<group>"; };
 		75AE06A1DAE24E2ABC052A79 /* PickpleApp-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "PickpleApp-Bridging-Header.h"; path = "PickpleApp/PickpleApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-PickpleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PickpleApp.release.xcconfig"; path = "Target Support Files/Pods-PickpleApp/Pods-PickpleApp.release.xcconfig"; sourceTree = "<group>"; };
+		A300549327C4B4E6004D4CFB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A300549527C4B5E0004D4CFB /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
 		A6E01A5993DB4C468BAD4718 /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "PickpleApp/noop-file.swift"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = PickpleApp/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-PickpleApp/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		32E725195CDB4779B440B66C /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; name = "Montserrat-Bold.ttf"; path = "../src/assets/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B40C0B76F00A49BD85E0D93F /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; name = "Montserrat-Regular.ttf"; path = "../src/assets/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		58215849B5B8468084463F17 /* Pretendard-Black.ttf */ = {isa = PBXFileReference; name = "Pretendard-Black.ttf"; path = "../src/assets/fonts/Pretendard-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0B19A96135FF416E833865F9 /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; name = "Pretendard-Bold.ttf"; path = "../src/assets/fonts/Pretendard-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B948FF726F78414D96FB1891 /* Pretendard-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Pretendard-ExtraBold.ttf"; path = "../src/assets/fonts/Pretendard-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C66B61D518664C42878D2C74 /* Pretendard-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Pretendard-ExtraLight.ttf"; path = "../src/assets/fonts/Pretendard-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A0A60C93E4324F0B8BA0D082 /* Pretendard-Light.ttf */ = {isa = PBXFileReference; name = "Pretendard-Light.ttf"; path = "../src/assets/fonts/Pretendard-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9B7E16C2A6B94B9395EFDEA9 /* Pretendard-Medium.ttf */ = {isa = PBXFileReference; name = "Pretendard-Medium.ttf"; path = "../src/assets/fonts/Pretendard-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		248E303D7ECF4DBDA075F3C5 /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; name = "Pretendard-Regular.ttf"; path = "../src/assets/fonts/Pretendard-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		600CAE987E944A6F8CB6BE8B /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; name = "Pretendard-SemiBold.ttf"; path = "../src/assets/fonts/Pretendard-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5F51B2A614D141B4A6237F84 /* Pretendard-Thin.ttf */ = {isa = PBXFileReference; name = "Pretendard-Thin.ttf"; path = "../src/assets/fonts/Pretendard-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +77,7 @@
 		13B07FAE1A68108700A75B9A /* PickpleApp */ = {
 			isa = PBXGroup;
 			children = (
+				A300549327C4B4E6004D4CFB /* GoogleService-Info.plist */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -84,12 +111,14 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A300549527C4B5E0004D4CFB /* Fonts */,
 				13B07FAE1A68108700A75B9A /* PickpleApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				D65327D7A22EEC0BE12398D9 /* Pods */,
 				D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */,
+				826584506100435DBCBB844D /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -137,6 +166,25 @@
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
+		};
+		826584506100435DBCBB844D /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				32E725195CDB4779B440B66C /* Montserrat-Bold.ttf */,
+				B40C0B76F00A49BD85E0D93F /* Montserrat-Regular.ttf */,
+				58215849B5B8468084463F17 /* Pretendard-Black.ttf */,
+				0B19A96135FF416E833865F9 /* Pretendard-Bold.ttf */,
+				B948FF726F78414D96FB1891 /* Pretendard-ExtraBold.ttf */,
+				C66B61D518664C42878D2C74 /* Pretendard-ExtraLight.ttf */,
+				A0A60C93E4324F0B8BA0D082 /* Pretendard-Light.ttf */,
+				9B7E16C2A6B94B9395EFDEA9 /* Pretendard-Medium.ttf */,
+				248E303D7ECF4DBDA075F3C5 /* Pretendard-Regular.ttf */,
+				600CAE987E944A6F8CB6BE8B /* Pretendard-SemiBold.ttf */,
+				5F51B2A614D141B4A6237F84 /* Pretendard-Thin.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -198,9 +246,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A300549627C4B5E0004D4CFB /* Fonts in Resources */,
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
+				A300549427C4B4E6004D4CFB /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
+				2471377155C14D5F971C3CC6 /* Montserrat-Bold.ttf in Resources */,
+				B14C9DD3F5634C338EDEEFE7 /* Montserrat-Regular.ttf in Resources */,
+				2226142D4987462B95A64A01 /* Pretendard-Black.ttf in Resources */,
+				F08F296E54784126890E584F /* Pretendard-Bold.ttf in Resources */,
+				F1E62A6BEF594B0DA9ACB37F /* Pretendard-ExtraBold.ttf in Resources */,
+				B422A5799D1746E0B949E035 /* Pretendard-ExtraLight.ttf in Resources */,
+				4F04A3C15B5145C79E0CB1F1 /* Pretendard-Light.ttf in Resources */,
+				55A935C43C064E6E892F8199 /* Pretendard-Medium.ttf in Resources */,
+				99ACA765B1BE4DA3AA610784 /* Pretendard-Regular.ttf in Resources */,
+				48BCCA3B860D4E1E8C51765B /* Pretendard-SemiBold.ttf in Resources */,
+				73464AA875224B288BF18F76 /* Pretendard-Thin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,11 +312,13 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PickpleApp/Pods-PickpleApp-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
