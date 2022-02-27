@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Linking, Alert } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import SettingElement from "../components/SettingElement";
 import StatusBar from "../components/StatusBar";
 import AccountManager from "../managers/AccountManager";
@@ -44,10 +45,23 @@ class SettingScreen extends React.Component {
 
     onPressLogOut() {
         console.log("SettingScreen.onPressLogOut");
-        GoogleSignin.signOut().then(() => {
-            AccountManager.logout();
-            this.props.navigation.replace("LoginScreen");
-        });
+        switch (AccountManager.getUserProfile().getSocial()) {
+            case "google":
+                GoogleSignin.signOut().then(() => {
+                    AccountManager.logout();
+                    this.props.navigation.replace("LoginScreen");
+                    return;
+                });
+                break;
+
+            case "apple":
+                break;
+
+            case "guest":
+                AccountManager.logout();
+                this.props.navigation.replace("LoginScreen");
+                break;
+        }
     }
 
     onPressDeleteAccount() {
@@ -72,11 +86,26 @@ class SettingScreen extends React.Component {
             alert("정말 진짜로 삭제하시겠습니까?", () => {
                 ApiManager.deleteAccount()
                     .then(() => {
-                        GoogleSignin.signOut()
-                            .then(() => {
-                                AccountManager.logout();
-                                this.props.navigation.replace("LoginScreen");
-                            });
+                        switch (AccountManager.getUserProfile().getSocial()) {
+                            case "google":
+                                GoogleSignin.signOut()
+                                    .then(() => {
+                                        AccountManager.logout();
+                                        this.props.navigation.replace("LoginScreen");
+                                    });
+                                break;
+
+                            case "apple":
+                                break;
+
+                            case "guest":
+                                AsyncStorage.removeItem("guestIdToken")
+                                    .then(() => {
+                                        AccountManager.logout();
+                                        this.props.navigation.replace("LoginScreen");
+                                    })
+                                break;
+                        }
                     });
             })
         })

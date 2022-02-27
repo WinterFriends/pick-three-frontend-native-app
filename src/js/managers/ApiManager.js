@@ -2,13 +2,30 @@ import Constant from "../common/Constant";
 import Goal from "../common/Goal";
 import UserGoal from "../common/UserGoal";
 import UserProfile from "../common/UserProfile";
-import AccountManager from "./AccountManager";
 
 class ApiManager {
+    static _accessToken = null;
+
+    static initAccessToken(accessToken) {
+        // AccountManager에서 accessToken을 바로 가져오면 루프 걸려서 따로 지정하는 함수를 만듦
+        // 이 함수는 AccountManager.setTokenSet 함수 안에서 호출 됨
+        this._accessToken = accessToken;
+    }
+
+    static getFetchDefaultHeaders() {
+        let options = {
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json',
+            }
+        };
+        return options;
+    }
+
     static getFetchHeaders() {
         let options = {
             headers: {
-                Authorization: `Bearer ${AccountManager.getAccessToken()}`,
+                Authorization: `Bearer ${this._accessToken}`,
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
             }
@@ -26,6 +43,33 @@ class ApiManager {
         let response = await fetch(wintyLoginUri, { headers: { "Authorization": idToken } });
         const tokenSet = await response.json();
         return tokenSet;
+    }
+
+    static async loginByGuest(idToken) {
+        let wintyLoginUri = Constant.API_DOMAIN + "/login/guest";
+
+        let data = JSON.stringify({
+            "Authorization": idToken
+        });
+
+        let options = {
+            method: "POST",
+            ...this.getFetchDefaultHeaders(),
+            body: data
+        }
+
+        let response = await fetch(wintyLoginUri, options);
+        const tokenSet = await response.json();
+        console.log(tokenSet);
+        return tokenSet;
+    }
+
+    static async getGuestIdToken() {
+        let wintyLoginUri = Constant.API_DOMAIN + "/token/guest";
+        let response = await fetch(wintyLoginUri);
+        const json = await response.json();
+        const idToken = json["idToken"];
+        return idToken;
     }
 
     static async refreshToken(refreshToken) {

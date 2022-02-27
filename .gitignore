@@ -77,3 +77,6 @@ dist/
 google-services.json
 *.aab
 *.apk
+
+# Key
+/src/value/Key.json

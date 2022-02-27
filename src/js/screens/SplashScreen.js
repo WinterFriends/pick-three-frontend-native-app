@@ -1,4 +1,5 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { StyleSheet, View, Text, Button, Image, ToastAndroid } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -20,7 +21,7 @@ class SplashScreen extends React.Component {
 
         this.state = {
             init: false,
-            logedin: null,
+            logedin: false,
             timeout: false,
             targetPage
         };
@@ -36,14 +37,28 @@ class SplashScreen extends React.Component {
         setTimeout(() => {
             this.setState({ timeout: true });
 
+            if (!this.state.init) return;
+
             // 화면 이동
-            if (this.state.init === true && this.state.logedin === true) {
-                this.navigation.replace(this.state.targetPage);
-            }
-            else if (this.state.init === true && this.state.logedin === false) {
-                this.navigation.replace("LoginScreen");
-            }
+            this.navigation.replace(this.state.targetPage);
+
         }, 1000);
+    }
+
+    setLoginState(state) {
+        let targetPage = state ? this.state.targetPage : "LoginScreen";
+
+        if (state) {
+            this.initData().then(() => {
+                this.setState({ init: true, logedin: true, targetPage });
+                if (this.state.timeout) this.navigation.replace(targetPage);
+            });
+        }
+        else {
+            this.setState({ init: true, logedin: false, targetPage });
+            if (this.state.timeout) this.navigation.replace(targetPage);
+        }
+
     }
 
     init() {
@@ -52,61 +67,84 @@ class SplashScreen extends React.Component {
             .then(logedin => {
                 // 로그인 안됨
                 if (!logedin) {
-                    this.setState({ init: true, logedin: false });
-
-                    // 화면 이동
-                    if (this.state.timeout)
-                        this.navigation.replace("LoginScreen");
-
+                    this.setLoginState(false);
                     return;
                 }
 
+                // 로그인 됨
+                // 토큰 상태 확인
                 let tokenState = JwtUtils.getTokenState(AccountManager.getAccessToken(), AccountManager.getRefreshToken());
 
+                // 이상 없음 (엑세스 토큰 기간 안지남)
                 if (tokenState == TokenState.None) {
-                    console.log("SplashScreen.init: tokenState.None");
-                    this.initData();
+                    this.setLoginState(true);
                 }
+                // 엑세스 토큰 만료
                 else if (tokenState == TokenState.NeedRefresh) {
-                    console.log("SplashScreen.init: tokenState.NeedRefresh");
+                    // 리스레쉬 토큰을 통해 엑세스 토큰 재발급
                     ApiManager.refreshToken(AccountManager.getRefreshToken())
                         .then(tokenSet => {
-                            AccountManager.setTokenSet(tokenSet);
-                            AccountManager.saveTokenSet();
-                            this.initData();
+                            AccountManager.initLoginInfo(tokenSet);
+                            this.setLoginState(true);
                         })
                         .catch(err => this.toastInternetError(err));
                 }
+                // 리프레쉬 토큰 만료
                 else if (tokenState == TokenState.NeedRelogin) {
-                    console.log("SplashScreen.init: tokenState.NeedRelogin");
-                    GoogleSignin.signOut().then(() => {
-                        AccountManager.logout();
-                        this.props.navigation.replace("LoginScreen");
+                    // 각 소셜 타입에 따라 처리
+                    AccountManager.loadUserProfile().then(userProfile => {
+                        switch (userProfile.getSocial()) {
+                            /* 구글 */
+                            case "google":
+                                GoogleSignin.signOut().then(() => {
+                                    AccountManager.logout();
+                                    this.setLoginState(false);
+                                    return;
+                                });
+                                break;
+
+                            /* 애플 */
+                            case "apple":
+                                break;
+
+                            /* 게스트 */
+                            case "guest":
+                                AsyncStorage.getItem("guestIdToken").then(idToken => {
+                                    if (!idToken) {
+                                        AccountManager.logout();
+                                        this.setLoginState(false);
+                                        return;
+                                    }
+
+                                    // 재로그인
+                                    ApiManager.loginByGuest(idToken).then(tokenSet => {
+                                        AccountManager.initLoginInfo(tokenSet).then(flag => {
+                                            if (!flag) AccountManager.logout();
+                                            this.setLoginState(flag);
+                                            return;
+                                        });
+                                    });
+                                });
+                                break;
+                        }
                     });
                 }
             })
 
     }
 
-    initData() {
-        // 프로필 가져오기
-        AccountManager.loadUserProfile()
-            .then(() => {
-                // 목표 리스트 가져오기
-                ApiManager.getGoalList()
-                    .then(goalList => {
-                        // 목표 배열 초기화
-                        GoalManager.setGoalList(goalList);
-                        console.log("SplashScreen.initData: GoalManager.setGoalList");
+    async initData() {
+        try {
+            await AccountManager.loadUserProfile();
 
-                        this.setState({ init: true, logedin: true });
+            let goalList = await ApiManager.getGoalList();
+            GoalManager.setGoalList(goalList);
 
-                        // 화면 이동
-                        if (this.state.timeout)
-                            this.navigation.replace(this.state.targetPage);
-                    })
-                    .catch(err => this.toastInternetError(err))
-            });
+            return true;
+        }
+        catch (error) {
+            return false;
+        }
     }
 
     toastInternetError(err) {

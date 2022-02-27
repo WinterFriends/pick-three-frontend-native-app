@@ -1,5 +1,6 @@
 import UserProfile from "../common/UserProfile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ApiManager from "./ApiManager";
 
 class AccountManager {
     static _isLogedin = false;
@@ -8,6 +9,31 @@ class AccountManager {
     /* Login */
     static _isLogin(bool) {
         this._isLogedin = bool ? true : false;
+    }
+
+    static async initLoginInfo(tokenSet) {
+        try {
+            this.setTokenSet(tokenSet);
+            await this.saveTokenSet();
+
+            // 정상 로그인 확인
+            let accessToken = this.getAccessToken();
+            if (accessToken == null) {
+                console.log("LoginScreen.signIn: Login failed");
+                return false;
+            }
+
+            // 프로필 저장
+            let userProfile = await ApiManager.getUserProfile();
+            this.setUserProfile(userProfile);
+            await this.saveUserProfile();
+
+            return true;
+        }
+        catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 
     static async saveTokenSet() {
@@ -56,6 +82,9 @@ class AccountManager {
 
         this._tokenSet = Object.freeze(tokenSet);
         this._isLogin(true);
+
+        ApiManager.initAccessToken(this.getAccessToken());
+
         console.log(`AccountManager.setTokenSet: accessToken: OK!, refreshToken: OK!`);
     }
 
@@ -79,7 +108,7 @@ class AccountManager {
     }
 
     static logout() {
-        this.setTokenSet({});
+        this._tokenSet = {};
         AsyncStorage.setItem("tokenSet", JSON.stringify({}));
     }
 

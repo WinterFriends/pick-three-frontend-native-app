@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, View, Text, Image, Linking, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, Image, Linking, TouchableOpacity, Alert } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constant from "../common/Constant";
 import AccountManager from "../managers/AccountManager"
 import StatusBar from "../components/StatusBar";
@@ -9,8 +10,10 @@ import Colors from "../common/Colors";
 import Styles from "../common/Styles";
 import ApiManager from "../managers/ApiManager";
 
+import Key from "../../value/Key.json";
+
 GoogleSignin.configure({
-    webClientId: "727563278880-89dkcgmm187dok7osr5c1cmjd85dhol3.apps.googleusercontent.com",
+    webClientId: Key.googleLoginClientId,
     offlineAccess: true
 });
 
@@ -23,7 +26,17 @@ class LoginScreen extends React.Component {
         }
     }
 
-    signIn = async () => {
+    initLoginInfo = async (tokenSet) => {
+        try {
+            let flag = await AccountManager.initLoginInfo(tokenSet);
+            if (flag) this.props.navigation.replace("SplashScreen", { targetPage: "ManualScreen" });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+    signInByGoogle = async () => {
         try {
             // 구글 로그인
             await GoogleSignin.hasPlayServices();
@@ -35,23 +48,44 @@ class LoginScreen extends React.Component {
 
             // winty 로그인
             const tokenSet = await ApiManager.loginByGoogle(idToken);
-            AccountManager.setTokenSet(tokenSet);
-            AccountManager.saveTokenSet();
+            await this.initLoginInfo(tokenSet);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
 
-            // 정상 로그인 확인
-            let accessToken = AccountManager.getAccessToken();
-            if (accessToken == null) {
-                return console.log("LoginScreen.signIn: Login failed");
+    signInByGuest = async () => {
+        try {
+            // 게스트 토큰 확인
+            let guestIdToken = await AsyncStorage.getItem("guestIdToken");
+            if (!guestIdToken) {
+                Alert.alert(
+                    "게스트로 시작하기",
+                    "게스트로 시작할 경우 '앱 삭제', '앱 데이터 삭제' 등의 행동을 할 경우 앱 내에서 작성하신 데이터가 없어집니다.\n그래도 진행하시겠습니까?\n(게스트 로그인 후에도 소셜 계정 연동 가능)",
+                    [
+                        { text: "아니오", style: "cancel" },
+                        {
+                            text: "예", onPress: () => {
+                                ApiManager.getGuestIdToken()  // 아이디 토큰 발급
+                                    .then(idToken => {
+                                        if (!idToken) return;
+
+                                        AsyncStorage.setItem("guestIdToken", idToken)  // 아이디 토큰 저장
+                                            .then(() => {
+                                                ApiManager.loginByGuest(idToken)
+                                                    .then(tokenSet => this.initLoginInfo(tokenSet));
+                                            });
+                                    })
+                            }
+                        }
+                    ],
+                    { cancelable: true });
             }
-
-            // 프로필 저장 및 화면 전환
-            ApiManager.getUserProfile()
-                .then(userProfile => {
-                    console.log(userProfile.toJson());
-                    AccountManager.setUserProfile(userProfile);
-                    AccountManager.saveUserProfile()
-                        .then(() => { this.props.navigation.replace("SplashScreen", { targetPage: "ManualScreen" }) });
-                });
+            else {
+                ApiManager.loginByGuest(guestIdToken)
+                    .then(tokenSet => this.initLoginInfo(tokenSet));
+            }
         }
         catch (error) {
             console.log(error);
@@ -68,22 +102,25 @@ class LoginScreen extends React.Component {
                 <Text style={styles.title}>Pickple</Text>
                 <Text style={styles.welcome}>소셜 계정으로 빠르게 시작해보세요</Text>
 
-                <TouchableOpacity style={{ marginBottom: 32 /*17*/ }} activeOpacity={Styles.activeOpacity} onPress={this.signIn.bind(this)}>
+                <TouchableOpacity style={{ marginBottom: 17 }} activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
                     <View style={styles.loginButton}>
                         <Image style={{ ...styles.loginButtonImage, width: 16, height: 16 }} source={require("../../img/login_google.png")} />
                         <Text style={styles.loginButtonText}>Google 계정으로 시작하기</Text>
                     </View>
                 </TouchableOpacity>
 
-                {
-                    false &&
-                    <TouchableOpacity style={{ marginBottom: 32 }} activeOpacity={Styles.activeOpacity} onPress={this.signIn.bind(this)}>
-                        <View style={styles.loginButton}>
-                            <Image style={{ ...styles.loginButtonImage, width: 15, height: 18 }} source={require("../../img/login_apple.png")} />
-                            <Text style={styles.loginButtonText}>Apple 계정으로 시작하기</Text>
-                        </View>
-                    </TouchableOpacity>
-                }
+                <TouchableOpacity style={{ marginBottom: 17 }} activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
+                    <View style={styles.loginButton}>
+                        <Image style={{ ...styles.loginButtonImage, width: 15, height: 18 }} source={require("../../img/login_apple.png")} />
+                        <Text style={styles.loginButtonText}>Apple 계정으로 시작하기</Text>
+                    </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{ marginBottom: 32 }} activeOpacity={Styles.activeOpacity} onPress={this.signInByGuest.bind(this)}>
+                    <View style={styles.loginButton}>
+                        <Text style={styles.loginButtonText}>게스트로 시작하기</Text>
+                    </View>
+                </TouchableOpacity>
 
                 <Text style={styles.notice}>
                     회원 가입 시,{" "}
