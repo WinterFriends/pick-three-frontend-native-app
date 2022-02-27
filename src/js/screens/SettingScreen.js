@@ -221,7 +221,7 @@ class SettingScreen extends React.Component {
                             </View>
 
                             <SettingElement title="Google 계정과 연동하기" onPress={this.onPressLinkGoogleAccount.bind(this)} />
-                            <SettingElement title="Apple 계정과 연동하기" onPress={this.onPressLinkAppleAccount.bind(this)} />
+                            {/* <SettingElement title="Apple 계정과 연동하기" onPress={this.onPressLinkAppleAccount.bind(this)} /> */}
                         </View>
                     }
 

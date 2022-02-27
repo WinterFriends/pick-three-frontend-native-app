@@ -102,19 +102,19 @@ class LoginScreen extends React.Component {
                 <Text style={styles.title}>Pickple</Text>
                 <Text style={styles.welcome}>소셜 계정으로 빠르게 시작해보세요</Text>
 
-                <TouchableOpacity style={{ marginBottom: 17 }} activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
+                <TouchableOpacity style={{ /* marginBottom: 17 */ }} activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
                     <View style={styles.loginButton}>
                         <Image style={{ ...styles.loginButtonImage, width: 16, height: 16 }} source={require("../../img/login_google.png")} />
                         <Text style={styles.loginButtonText}>Google 계정으로 시작하기</Text>
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
+                {/* <TouchableOpacity activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
                     <View style={styles.loginButton}>
                         <Image style={{ ...styles.loginButtonImage, width: 15, height: 18 }} source={require("../../img/login_apple.png")} />
                         <Text style={styles.loginButtonText}>Apple 계정으로 시작하기</Text>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 <TouchableOpacity style={styles.guestLoginTouchableOpacity} activeOpacity={Styles.activeOpacity} onPress={this.signInByGuest.bind(this)}>
                     <View style={styles.guestLoginContainer}>
