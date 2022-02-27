@@ -109,16 +109,16 @@ class LoginScreen extends React.Component {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ marginBottom: 17 }} activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
+                <TouchableOpacity activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
                     <View style={styles.loginButton}>
                         <Image style={{ ...styles.loginButtonImage, width: 15, height: 18 }} source={require("../../img/login_apple.png")} />
                         <Text style={styles.loginButtonText}>Apple 계정으로 시작하기</Text>
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ marginBottom: 32 }} activeOpacity={Styles.activeOpacity} onPress={this.signInByGuest.bind(this)}>
-                    <View style={styles.loginButton}>
-                        <Text style={styles.loginButtonText}>게스트로 시작하기</Text>
+                <TouchableOpacity style={styles.guestLoginTouchableOpacity} activeOpacity={Styles.activeOpacity} onPress={this.signInByGuest.bind(this)}>
+                    <View style={styles.guestLoginContainer}>
+                        <Text style={styles.guestLoginText}>게스트로 시작하기</Text>
                     </View>
                 </TouchableOpacity>
 
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     welcome: {
         ...Styles.textStyle.body01,
         color: Colors.white,
-        marginBottom: 50
+        marginBottom: 60
     },
     notice: {
         ...Styles.textStyle.body03,
@@ -185,6 +185,25 @@ const styles = StyleSheet.create({
         flex: 1,
         ...Styles.textStyle.subtitle01,
         textAlign: "center"
+    },
+
+    // 게스트
+    guestLoginTouchableOpacity: {
+        /* margin -5는 paddingVertical */
+        marginTop: 22 - 5,
+        marginBottom: 42 - 5,
+    },
+    guestLoginContainer: {
+        alignSelf: "center",
+        flexDirection: "row",
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    },
+    guestLoginText: {
+        ...Styles.textStyle.body02,
+        textAlign: "center",
+        color: Colors.black05,
+        textDecorationLine: "underline"
     }
 });
 

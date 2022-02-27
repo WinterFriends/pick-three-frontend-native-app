@@ -64,6 +64,55 @@ class ApiManager {
         return tokenSet;
     }
 
+    static async linkGoogleAccount(guestIdToken, googleIdToken) {
+        let success = false;
+        let msg = "연동에 실패했습니다.";
+        let status = 0;
+
+        try {
+            let data = JSON.stringify({
+                guestIdToken,
+                googleIdToken
+            });
+
+            let options = {
+                method: "POST",
+                ...this.getFetchHeaders(),
+                body: data
+            };
+
+            let uri = Constant.API_DOMAIN + "/link/google";
+            let response = await fetch(uri, options);
+            let responseJson = await response.json();
+            status = response.status;
+
+            if (status == 401) {
+                msg = responseJson["detail"]
+            }
+            else if (status == 400) {
+                msg = responseJson["msg"];
+            }
+            else if (status == 200) {
+                if (responseJson.hasOwnProperty("err_msg")) {
+                    msg = responseJson["err_msg"];
+                }
+                /* 연동 성공 */
+                else if (responseJson["success"] == 1) {
+                    success = true;
+                    msg = "Google 계정 연동을 완료하였습니다.\n자동으로 로그아웃됩니다.\n연동한 Google 계정으로 다시 로그인해주세요.";
+                }
+            }
+        }
+        catch (err) {
+            console.log(err);
+            success = false;
+            msg = "오류가 발생했습니다.";
+        }
+        finally {
+            return { status, success, msg };
+        }
+    }
+
     static async getGuestIdToken() {
         let wintyLoginUri = Constant.API_DOMAIN + "/token/guest";
         let response = await fetch(wintyLoginUri);

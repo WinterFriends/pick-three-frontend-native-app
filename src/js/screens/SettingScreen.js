@@ -11,6 +11,13 @@ import Styles from "../common/Styles";
 import Constant from "../common/Constant";
 import ApiManager from "../managers/ApiManager";
 
+import Key from "../../value/Key.json";
+
+GoogleSignin.configure({
+    webClientId: Key.googleLoginClientId,
+    offlineAccess: true
+});
+
 const socialImage = {
     "google": require("../../img/social_google.png")
 }
@@ -111,6 +118,62 @@ class SettingScreen extends React.Component {
         })
     }
 
+    async onPressLinkGoogleAccount() {
+        let status = 0;
+        let success = false;
+        let msg = "연동에 실패했습니다.";
+
+        try {
+            // 구글 로그인
+            await GoogleSignin.hasPlayServices();
+
+            await GoogleSignin.signIn();
+
+            const tokens = await GoogleSignin.getTokens();
+            const googleIdToken = tokens.idToken;
+
+            // 게스트 아이디 토큰 확인
+            let guestIdToken = await AsyncStorage.getItem("guestIdToken");
+
+            if (!guestIdToken) {
+                msg = "guestIdToken이 없습니다.";
+                throw new Error("guestIdToken이 없습니다.");
+            }
+
+            // 링크 api 호출
+            let linkResult = await ApiManager.linkGoogleAccount(guestIdToken, googleIdToken);
+            status = linkResult.status;
+            success = linkResult.success;
+            msg = linkResult.msg;
+        }
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            Alert.alert(
+                `연동 ${success ? "성공" : "실패"}`,
+                `${msg}${success ? "" : `\n(status: ${status})`}`,
+                [{
+                    text: "확인",
+                    onPress: () => {
+                        if (!success) return;
+
+                        // 연동 성공 후, 게스트 아이디 토큰 삭제 및 화면 전환
+                        AsyncStorage.removeItem("guestIdToken").then(() => {
+                            AccountManager.logout();
+                            this.props.navigation.replace("LoginScreen");
+                        });
+                    }
+                }],
+                { cancelable: false }
+            );
+        }
+    }
+
+    async onPressLinkAppleAccount() {
+
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -149,6 +212,18 @@ class SettingScreen extends React.Component {
                     <SettingElement onPress={() => { Linking.openURL(Constant.PICKPLE_DOMAIN + "/policies/service.html") }} title="서비스 이용약관" />
                     <SettingElement onPress={() => { Linking.openURL(Constant.PICKPLE_DOMAIN + "/policies/privacy.html") }} title="개인정보처리방침" />
                     <SettingElement onPress={() => { Linking.openURL(Constant.PICKPLE_DOMAIN + "/support.html") }} title="문의하기" />
+
+                    {
+                        AccountManager.getUserProfile().getSocial() == "guest" &&
+                        <View style={{ flexDirection: "column" }}>
+                            <View style={styles.secantLineContainer}>
+                                <View style={styles.secantLine}></View>
+                            </View>
+
+                            <SettingElement title="Google 계정과 연동하기" onPress={this.onPressLinkGoogleAccount.bind(this)} />
+                            <SettingElement title="Apple 계정과 연동하기" onPress={this.onPressLinkAppleAccount.bind(this)} />
+                        </View>
+                    }
 
                     <View style={styles.secantLineContainer}>
                         <View style={styles.secantLine}></View>
