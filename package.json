@@ -9,6 +9,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@invertase/react-native-apple-authentication": "^2.1.5",
     "@react-native-async-storage/async-storage": "^1.15.14",
     "@react-native-google-signin/google-signin": "^7.0.4",
     "@react-navigation/bottom-tabs": "^6.0.9",
@@ -31,7 +32,8 @@
     "react-native-status-bar-height": "^2.6.0",
     "react-native-web": "0.17.1",
     "react-native-webview": "11.15.0",
-    "react-navigation-tabs": "^2.11.1"
+    "react-navigation-tabs": "^2.11.1",
+    "rn-uuid": "^1.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
