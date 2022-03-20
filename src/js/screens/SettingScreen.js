@@ -1,6 +1,8 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Linking, Alert } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Linking, Alert, Platform } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import appleAuth, { appleAuthAndroid } from '@invertase/react-native-apple-authentication';
+var uuid = require('rn-uuid');
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SettingElement from "../components/SettingElement";
 import StatusBar from "../components/StatusBar";
@@ -62,6 +64,8 @@ class SettingScreen extends React.Component {
                 break;
 
             case "apple":
+                AccountManager.logout();
+                this.props.navigation.replace("LoginScreen");
                 break;
 
             case "guest":
@@ -103,6 +107,8 @@ class SettingScreen extends React.Component {
                                 break;
 
                             case "apple":
+                                AccountManager.logout();
+                                this.props.navigation.replace("LoginScreen");
                                 break;
 
                             case "guest":
@@ -124,9 +130,11 @@ class SettingScreen extends React.Component {
         let msg = "연동에 실패했습니다.";
 
         try {
+            // 구글 로그아웃
+            await GoogleSignin.signOut();
+
             // 구글 로그인
             await GoogleSignin.hasPlayServices();
-
             await GoogleSignin.signIn();
 
             const tokens = await GoogleSignin.getTokens();
@@ -160,6 +168,70 @@ class SettingScreen extends React.Component {
 
                         // 연동 성공 후, 게스트 아이디 토큰 삭제 및 화면 전환
                         AsyncStorage.removeItem("guestIdToken").then(() => {
+                            GoogleSignin.signOut().then(() => {
+                                AccountManager.logout();
+                                this.props.navigation.replace("LoginScreen");
+                            });
+                        });
+                    }
+                }],
+                { cancelable: false }
+            );
+        }
+    }
+
+    async onPressLinkAppleAccount() {
+        let status = 0;
+        let success = false;
+        let msg = "연동에 실패했습니다.";
+
+        try {
+            let AppleIdToken = null;
+
+            // Android
+            if (Platform.OS == "android") {
+                let userInfo = await this.signInByAppleAndroid();
+                AppleIdToken = userInfo.idToken;
+            }
+            // iOS
+            else {
+                // performs login request
+                const appleAuthRequestResponse = await appleAuth.performRequest({
+                    requestedOperation: appleAuth.Operation.LOGIN,
+                    requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+                });
+
+                // get current authentication state for user
+                // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+                // const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+
+                AppleIdToken = appleAuthRequestResponse.identityToken;
+            }
+
+            // 애플 아이디 토큰 확인
+            if (!AppleIdToken) return;
+
+            // 링크 api 호출
+            // /!\ 구현 필요
+            let linkResult = await ApiManager.linkAppleAccount(guestIdToken, AppleIdToken);
+            status = linkResult.status;
+            success = linkResult.success;
+            msg = linkResult.msg;
+        }
+        catch (err) {
+            console.log(err);
+        }
+        finally {
+            Alert.alert(
+                `연동 ${success ? "성공" : "실패"}`,
+                `${msg}${success ? "" : `\n(status: ${status})`}`,
+                [{
+                    text: "확인",
+                    onPress: () => {
+                        if (!success) return;
+
+                        // 연동 성공 후, 게스트 아이디 토큰 삭제 및 화면 전환
+                        AsyncStorage.removeItem("guestIdToken").then(() => {
                             AccountManager.logout();
                             this.props.navigation.replace("LoginScreen");
                         });
@@ -170,8 +242,41 @@ class SettingScreen extends React.Component {
         }
     }
 
-    async onPressLinkAppleAccount() {
+    async signInByAppleAndroid() {
+        // Generate secure, random values for state and nonce
+        const rawNonce = uuid.v4();
+        const state = uuid.v4();
 
+        // Configure the request
+        appleAuthAndroid.configure({
+            // The Service ID you registered with Apple
+            clientId: 'io.winty.pickple.web',
+
+            // Return URL added to your Apple dev console. We intercept this redirect, but it must still match
+            // the URL you provided to Apple. It can be an empty route on your backend as it's never called.
+            redirectUri: 'https://api.pickple.winty.io/apple/web/callback',
+
+            // The type of response requested - code, id_token, or both.
+            responseType: appleAuthAndroid.ResponseType.ALL,
+
+            // The amount of user information requested from Apple.
+            scope: appleAuthAndroid.Scope.ALL,
+
+            // Random nonce value that will be SHA256 hashed before sending to Apple.
+            nonce: rawNonce,
+
+            // Unique state value used to prevent CSRF attacks. A UUID will be generated if nothing is provided.
+            state,
+        });
+
+        // Open the browser window for user sign in
+        const response = await appleAuthAndroid.signIn();
+
+        idToken = response.id_token
+        firstName = response.user.name.firstName;
+        lastName = response.user.name.lastName;
+
+        return { idToken, firstName, lastName };
     }
 
     render() {
@@ -221,7 +326,7 @@ class SettingScreen extends React.Component {
                             </View>
 
                             <SettingElement title="Google 계정과 연동하기" onPress={this.onPressLinkGoogleAccount.bind(this)} />
-                            {/* <SettingElement title="Apple 계정과 연동하기" onPress={this.onPressLinkAppleAccount.bind(this)} /> */}
+                            <SettingElement title="Apple 계정과 연동하기" onPress={this.onPressLinkAppleAccount.bind(this)} />
                         </View>
                     }
 

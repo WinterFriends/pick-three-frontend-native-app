@@ -113,6 +113,14 @@ class ApiManager {
         }
     }
 
+    static async loginByApple(idToken, firstName, lastName) {
+        console.log(firstName, lastName);
+        let wintyLoginUri = Constant.API_DOMAIN + "/login/apple";
+        let response = await fetch(wintyLoginUri, { headers: { idToken, firstName, lastName } });
+        const tokenSet = await response.json();
+        return tokenSet;
+    }
+
     static async getGuestIdToken() {
         let wintyLoginUri = Constant.API_DOMAIN + "/token/guest";
         let response = await fetch(wintyLoginUri);
