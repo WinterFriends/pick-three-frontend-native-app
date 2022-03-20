@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import DoubleClick from "react-native-double-click-instagram";
+import DoubleClick from "./DoubleClick";
 import Colors from "../common/Colors";
 import Styles from "../common/Styles";
 class UserGoalListElement extends React.Component {

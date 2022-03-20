@@ -1,5 +1,4 @@
 import React from "react";
-import * as SplashScreenExpo from 'expo-splash-screen';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SplashScreen from "./src/js/screens/SplashScreen";
@@ -28,7 +27,6 @@ const Stack = createNativeStackNavigator();
 class App extends React.Component {
   constructor(props) {
     super(props);
-    SplashScreenExpo.hideAsync();
   }
 
   render() {

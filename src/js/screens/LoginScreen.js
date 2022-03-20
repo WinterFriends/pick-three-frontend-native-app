@@ -133,9 +133,15 @@ class LoginScreen extends React.Component {
         // Open the browser window for user sign in
         const response = await appleAuthAndroid.signIn();
 
-        idToken = response.id_token
-        firstName = response.user.name.firstName;
-        lastName = response.user.name.lastName;
+        let idToken = response.id_token;
+        let firstName = "";
+        let lastName = "";
+
+        // 애플은 첫 로그인 때만 정보를 줌
+        if (response.user && response.user.name) {
+            firstName = response.user.name.firstName;
+            lastName = response.user.name.lastName;
+        }
 
         return { idToken, firstName, lastName };
     }

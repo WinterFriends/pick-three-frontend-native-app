@@ -1,53 +1,42 @@
 {
-  "name": "Pickple",
-  "version": "1.1.1",
+  "name": "pickple",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "start": "expo start --dev-client",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
-    "eject": "expo eject"
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^2.1.5",
-    "@react-native-async-storage/async-storage": "^1.15.14",
-    "@react-native-google-signin/google-signin": "^7.0.4",
-    "@react-navigation/bottom-tabs": "^6.0.9",
-    "@react-navigation/native": "^6.0.6",
-    "@react-navigation/native-stack": "^6.2.5",
-    "expo": "~44.0.0",
-    "expo-splash-screen": "~0.14.1",
-    "expo-status-bar": "~1.2.0",
+    "@react-native-async-storage/async-storage": "^1.17.0",
+    "@react-native-google-signin/google-signin": "^7.2.1",
+    "@react-navigation/bottom-tabs": "^6.2.0",
+    "@react-navigation/native": "^6.0.8",
+    "@react-navigation/native-stack": "^6.5.0",
     "jwt-decode": "^3.1.2",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
-    "react-native": "0.64.3",
+    "react": "17.0.2",
+    "react-native": "0.67.4",
     "react-native-app-intro-slider": "^4.0.4",
-    "react-native-calendars": "^1.1274.0",
-    "react-native-date-picker": "^4.1.3",
-    "react-native-double-click-instagram": "^1.0.4",
-    "react-native-reanimated": "^2.3.1",
-    "react-native-safe-area-context": "3.3.2",
-    "react-native-screens": "~3.10.1",
+    "react-native-date-picker": "^4.2.0",
+    "react-native-safe-area-context": "^4.2.1",
+    "react-native-screens": "^3.13.1",
     "react-native-status-bar-height": "^2.6.0",
-    "react-native-web": "0.17.1",
-    "react-native-webview": "11.15.0",
-    "react-navigation-tabs": "^2.11.1",
     "rn-uuid": "^1.5.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.17.8",
+    "@babel/runtime": "^7.17.8",
+    "@react-native-community/eslint-config": "^3.0.1",
+    "babel-jest": "^27.5.1",
+    "eslint": "^8.11.0",
+    "jest": "^27.5.1",
+    "metro-react-native-babel-preset": "^0.69.1",
+    "react-test-renderer": "17.0.2"
   },
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wintyio/pick-three-frontend-native-app.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/wintyio/pick-three-frontend-native-app/issues"
-  },
-  "homepage": "https://github.com/wintyio/pick-three-frontend-native-app#readme",
-  "description": ""
+  "jest": {
+    "preset": "react-native"
+  }
 }

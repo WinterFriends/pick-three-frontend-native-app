@@ -1,13 +1,13 @@
-import { StatusBar as Bar } from "expo-status-bar";
-import { useState } from "react";
+import { StatusBar as Bar } from 'react-native';
+import React, { useState } from "react";
 
 export default function StatusBar(props) {
-    let style = "dark";
+    let style = "light-content";
 
     if (props && props.style)
-        style = "light";
+        style = "dark-content";
 
     return (
-        <Bar style={style} />
+        <Bar barStyle={style} />
     )
 }
