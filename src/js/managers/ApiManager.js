@@ -113,12 +113,60 @@ class ApiManager {
         }
     }
 
-    static async loginByApple(idToken, firstName, lastName) {
-        console.log(firstName, lastName);
+    static async loginByApple(idToken) {
         let wintyLoginUri = Constant.API_DOMAIN + "/login/apple";
-        let response = await fetch(wintyLoginUri, { headers: { idToken, firstName, lastName } });
+        let response = await fetch(wintyLoginUri, { headers: { idToken } });
         const tokenSet = await response.json();
         return tokenSet;
+    }
+
+    static async linkAppleAccount(guestIdToken, appleIdToken) {
+        let success = false;
+        let msg = "연동에 실패했습니다.";
+        let status = 0;
+
+        try {
+            let data = JSON.stringify({
+                guestIdToken,
+                appleIdToken
+            });
+
+            let options = {
+                method: "POST",
+                ...this.getFetchHeaders(),
+                body: data
+            };
+
+            let uri = Constant.API_DOMAIN + "/link/apple";
+            let response = await fetch(uri, options);
+            let responseJson = await response.json();
+            status = response.status;
+
+            if (status == 401) {
+                msg = responseJson["detail"]
+            }
+            else if (status == 400) {
+                msg = responseJson["msg"];
+            }
+            else if (status == 200) {
+                if (responseJson.hasOwnProperty("err_msg")) {
+                    msg = responseJson["err_msg"];
+                }
+                /* 연동 성공 */
+                else if (responseJson["success"] == 1) {
+                    success = true;
+                    msg = "Apple 계정 연동을 완료하였습니다.\n자동으로 로그아웃됩니다.\n연동한 Apple 계정으로 다시 로그인해주세요.";
+                }
+            }
+        }
+        catch (err) {
+            console.log(err);
+            success = false;
+            msg = "오류가 발생했습니다.";
+        }
+        finally {
+            return { status, success, msg };
+        }
     }
 
     static async getGuestIdToken() {

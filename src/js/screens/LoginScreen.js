@@ -60,15 +60,10 @@ class LoginScreen extends React.Component {
     signInByApple = async () => {
         try {
             let idToken = null;
-            let firstName = "";
-            let lastName = "";
 
             // Android
             if (Platform.OS == "android") {
-                let userInfo = await this.signInByAppleAndroid();
-                idToken = userInfo.idToken;
-                firstName = userInfo.firstName;
-                lastName = userInfo.lastName;
+                idToken = await this.signInByAppleAndroid();
             }
             // iOS
             else {
@@ -83,19 +78,13 @@ class LoginScreen extends React.Component {
                 // const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
 
                 idToken = appleAuthRequestResponse.identityToken;
-                firstName = appleAuthRequestResponse.fullName.givenName;
-                lastName = appleAuthRequestResponse.fullName.familyName;
             }
 
             // 애플 아이디 토큰 확인
             if (!idToken) return;
 
-            // null 무시
-            if (!firstName) firstName = "";
-            if (!lastName) lastName = "";
-
             // winty 로그인
-            const tokenSet = await ApiManager.loginByApple(idToken, firstName, lastName);
+            const tokenSet = await ApiManager.loginByApple(idToken);
             await this.initLoginInfo(tokenSet);
         }
         catch (err) {
@@ -134,16 +123,8 @@ class LoginScreen extends React.Component {
         const response = await appleAuthAndroid.signIn();
 
         let idToken = response.id_token;
-        let firstName = "";
-        let lastName = "";
 
-        // 애플은 첫 로그인 때만 정보를 줌
-        if (response.user && response.user.name) {
-            firstName = response.user.name.firstName;
-            lastName = response.user.name.lastName;
-        }
-
-        return { idToken, firstName, lastName };
+        return idToken;
     }
 
     signInByGuest = async () => {
@@ -195,14 +176,14 @@ class LoginScreen extends React.Component {
 
                 <TouchableOpacity style={{ marginBottom: 17 }} activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
                     <View style={styles.loginButton}>
-                        <Image style={{ ...styles.loginButtonImage, width: 16, height: 16 }} source={require("../../img/login_google.png")} />
+                        <Image style={{ ...styles.loginButtonImage, width: 16, height: 16 }} source={require("../../img/social_google.png")} />
                         <Text style={styles.loginButtonText}>Google 계정으로 시작하기</Text>
                     </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity activeOpacity={Styles.activeOpacity} onPress={this.signInByApple.bind(this)}>
                     <View style={styles.loginButton}>
-                        <Image style={{ ...styles.loginButtonImage, width: 15, height: 18 }} source={require("../../img/login_apple.png")} />
+                        <Image style={{ ...styles.loginButtonImage, width: 16, height: 16 }} source={require("../../img/social_apple.png")} />
                         <Text style={styles.loginButtonText}>Apple 계정으로 시작하기</Text>
                     </View>
                 </TouchableOpacity>

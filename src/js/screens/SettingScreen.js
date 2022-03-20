@@ -21,7 +21,8 @@ GoogleSignin.configure({
 });
 
 const socialImage = {
-    "google": require("../../img/social_google.png")
+    "google": require("../../img/social_google.png"),
+    "apple": require("../../img/social_apple.png")
 }
 
 class SettingScreen extends React.Component {
@@ -186,12 +187,14 @@ class SettingScreen extends React.Component {
         let msg = "연동에 실패했습니다.";
 
         try {
+            // 게스트 아이디 토큰 확인
+            let guestIdToken = await AsyncStorage.getItem("guestIdToken");
+
             let AppleIdToken = null;
 
             // Android
             if (Platform.OS == "android") {
-                let userInfo = await this.signInByAppleAndroid();
-                AppleIdToken = userInfo.idToken;
+                AppleIdToken = await this.signInByAppleAndroid();
             }
             // iOS
             else {
@@ -273,10 +276,8 @@ class SettingScreen extends React.Component {
         const response = await appleAuthAndroid.signIn();
 
         idToken = response.id_token
-        firstName = response.user.name.firstName;
-        lastName = response.user.name.lastName;
 
-        return { idToken, firstName, lastName };
+        return idToken;
     }
 
     render() {
