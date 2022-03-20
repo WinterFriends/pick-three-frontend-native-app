@@ -1,6 +1,8 @@
 import React from "react";
-import { StyleSheet, View, Text, Image, Linking, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, View, Text, Image, Linking, TouchableOpacity, Alert, Platform } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import appleAuth, { appleAuthAndroid } from '@invertase/react-native-apple-authentication';
+var uuid = require('rn-uuid');
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constant from "../common/Constant";
 import AccountManager from "../managers/AccountManager"
@@ -55,6 +57,89 @@ class LoginScreen extends React.Component {
         }
     }
 
+    signInByApple = async () => {
+        try {
+            let idToken = null;
+            let firstName = "";
+            let lastName = "";
+
+            // Android
+            if (Platform.OS == "android") {
+                let userInfo = await this.signInByAppleAndroid();
+                idToken = userInfo.idToken;
+                firstName = userInfo.firstName;
+                lastName = userInfo.lastName;
+            }
+            // iOS
+            else {
+                // performs login request
+                const appleAuthRequestResponse = await appleAuth.performRequest({
+                    requestedOperation: appleAuth.Operation.LOGIN,
+                    requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+                });
+
+                // get current authentication state for user
+                // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+                // const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+
+                idToken = appleAuthRequestResponse.identityToken;
+                firstName = appleAuthRequestResponse.fullName.givenName;
+                lastName = appleAuthRequestResponse.fullName.familyName;
+            }
+
+            // 애플 아이디 토큰 확인
+            if (!idToken) return;
+
+            // null 무시
+            if (!firstName) firstName = "";
+            if (!lastName) lastName = "";
+
+            // winty 로그인
+            const tokenSet = await ApiManager.loginByApple(idToken, firstName, lastName);
+            await this.initLoginInfo(tokenSet);
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    signInByAppleAndroid = async () => {
+        // Generate secure, random values for state and nonce
+        const rawNonce = uuid.v4();
+        const state = uuid.v4();
+
+        // Configure the request
+        appleAuthAndroid.configure({
+            // The Service ID you registered with Apple
+            clientId: 'io.winty.pickple.web',
+
+            // Return URL added to your Apple dev console. We intercept this redirect, but it must still match
+            // the URL you provided to Apple. It can be an empty route on your backend as it's never called.
+            redirectUri: 'https://api.pickple.winty.io/apple/web/callback',
+
+            // The type of response requested - code, id_token, or both.
+            responseType: appleAuthAndroid.ResponseType.ALL,
+
+            // The amount of user information requested from Apple.
+            scope: appleAuthAndroid.Scope.ALL,
+
+            // Random nonce value that will be SHA256 hashed before sending to Apple.
+            nonce: rawNonce,
+
+            // Unique state value used to prevent CSRF attacks. A UUID will be generated if nothing is provided.
+            state,
+        });
+
+        // Open the browser window for user sign in
+        const response = await appleAuthAndroid.signIn();
+
+        idToken = response.id_token
+        firstName = response.user.name.firstName;
+        lastName = response.user.name.lastName;
+
+        return { idToken, firstName, lastName };
+    }
+
     signInByGuest = async () => {
         try {
             // 게스트 토큰 확인
@@ -62,18 +147,18 @@ class LoginScreen extends React.Component {
             if (!guestIdToken) {
                 Alert.alert(
                     "게스트로 시작하기",
-                    "게스트로 시작할 경우 '앱 삭제', '앱 데이터 삭제' 등의 행동을 할 경우 앱 내에서 작성하신 데이터가 없어집니다.\n그래도 진행하시겠습니까?\n(게스트 로그인 후에도 소셜 계정 연동 가능)",
+                    "소셜 계정을 연동하지 않으면 데이터가 유실될 수 있으니 주의해주세요!",
                     [
                         { text: "아니오", style: "cancel" },
                         {
                             text: "예", onPress: () => {
-                                ApiManager.getGuestIdToken()  // 아이디 토큰 발급
-                                    .then(idToken => {
-                                        if (!idToken) return;
+                                ApiManager.getGuestIdToken()  // 게스트 아이디 토큰 발급
+                                    .then(guestIdToken => {
+                                        if (!guestIdToken) return;
 
-                                        AsyncStorage.setItem("guestIdToken", idToken)  // 아이디 토큰 저장
+                                        AsyncStorage.setItem("guestIdToken", guestIdToken)  // 게스트 아이디 토큰 저장
                                             .then(() => {
-                                                ApiManager.loginByGuest(idToken)
+                                                ApiManager.loginByGuest(guestIdToken)
                                                     .then(tokenSet => this.initLoginInfo(tokenSet));
                                             });
                                     })
@@ -102,19 +187,19 @@ class LoginScreen extends React.Component {
                 <Text style={styles.title}>Pickple</Text>
                 <Text style={styles.welcome}>소셜 계정으로 빠르게 시작해보세요</Text>
 
-                <TouchableOpacity style={{ /* marginBottom: 17 */ }} activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
+                <TouchableOpacity style={{ marginBottom: 17 }} activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
                     <View style={styles.loginButton}>
                         <Image style={{ ...styles.loginButtonImage, width: 16, height: 16 }} source={require("../../img/login_google.png")} />
                         <Text style={styles.loginButtonText}>Google 계정으로 시작하기</Text>
                     </View>
                 </TouchableOpacity>
 
-                {/* <TouchableOpacity activeOpacity={Styles.activeOpacity} onPress={this.signInByGoogle.bind(this)}>
+                <TouchableOpacity activeOpacity={Styles.activeOpacity} onPress={this.signInByApple.bind(this)}>
                     <View style={styles.loginButton}>
                         <Image style={{ ...styles.loginButtonImage, width: 15, height: 18 }} source={require("../../img/login_apple.png")} />
                         <Text style={styles.loginButtonText}>Apple 계정으로 시작하기</Text>
                     </View>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
 
                 <TouchableOpacity style={styles.guestLoginTouchableOpacity} activeOpacity={Styles.activeOpacity} onPress={this.signInByGuest.bind(this)}>
                     <View style={styles.guestLoginContainer}>
@@ -129,8 +214,9 @@ class LoginScreen extends React.Component {
                     <Text style={styles.underLine} onPress={() => { Linking.openURL(Constant.PICKPLE_DOMAIN + "/policies/privacy.html") }}>개인정보처리방침</Text>
                     에 동의한 것으로 간주합니다.
                 </Text>
+
                 <StatusBar style="light" />
-            </View>
+            </View >
         );
     }
 }
