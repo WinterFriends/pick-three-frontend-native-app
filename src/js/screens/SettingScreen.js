@@ -293,7 +293,7 @@ class SettingScreen extends React.Component {
                 </View>
 
                 {/* 스크롤 뷰 */}
-                <ScrollView style={styles.mainScrollView}>
+                <ScrollView style={styles.mainScrollView} contentContainerStyle={{ paddingBottom: 50 }}>
                     {/* 프로필 */}
                     <View style={styles.profileContainer}>
                         <SettingElement

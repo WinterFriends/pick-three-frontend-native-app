@@ -39,7 +39,7 @@ class ManualScreen extends React.Component {
                     activeDotStyle={{ backgroundColor: Colors.primary01 }}
                     renderNextButton={() => (<Text style={styles.button}>다음</Text>)}
                     renderDoneButton={() => (<Text style={styles.button}>완료</Text>)} />
-                <StatusBar />
+                <StatusBar backgroundColor={Colors.background} />
             </View>
         );
     }

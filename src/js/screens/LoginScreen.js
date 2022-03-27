@@ -202,7 +202,7 @@ class LoginScreen extends React.Component {
                     에 동의한 것으로 간주합니다.
                 </Text>
 
-                <StatusBar style="light" />
+                <StatusBar style="light" backgroundColor="#222222" />
             </View >
         );
     }

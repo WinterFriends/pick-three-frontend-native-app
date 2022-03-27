@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./HomeScreen";
 import CalendarScreen from "./CalendarScreen";
@@ -18,7 +18,7 @@ class TabNavigationScreen extends React.Component {
             <Tab.Navigator
                 screenOptions={{
                     tabBarStyle: {
-                        height: 24 + (26 * 2),  // iconSize + paddingVertivcal
+                        height: Platform.OS == "android" ? 24 + (26 * 2) : 24 + (40 * 2),  // iconSize + paddingVertivcal
                     }
                 }} >
 

@@ -160,7 +160,7 @@ class SplashScreen extends React.Component {
                     <Image style={styles.logo} source={require("../../img/pickple_logo.png")} />
                     <Text style={styles.title}>Pickple</Text>
                 </View>
-                <StatusBar />
+                <StatusBar style="light" />
             </View>
         );
     }

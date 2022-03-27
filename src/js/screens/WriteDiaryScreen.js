@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button, Image, ScrollView, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, Button, Image, ScrollView, TouchableOpacity, StyleSheet, Alert, Platform } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Colors from "../common/Colors";
 import Goal from "../common/Goal";
@@ -140,7 +140,8 @@ const styles = StyleSheet.create({
     // 확인 버튼
     confirmButton: {
         width: "100%",
-        paddingVertical: 26,
+        paddingTop: 26,
+        paddingBottom: Platform.OS == "android" ? 26 : 50,
         alignItems: "center",
         backgroundColor: Colors.primary01
     },
