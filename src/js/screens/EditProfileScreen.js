@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, Button, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Colors from "../common/Colors";
 import Styles from "../common/Styles";
@@ -58,31 +58,36 @@ class EditProfileScreen extends React.Component {
                     <Text style={styles.cancelText}>건너뛰기</Text>
                 </TouchableOpacity>
 
-                <ScrollView style={styles.mainScrollView} contentContainerStyle={styles.mainScrollViewContainer}>
-                    <View style={styles.mainContainer}>
+                <KeyboardAvoidingView
+                    style={{ flex: 1, width: "100%" }}
+                    behavior={Platform.OS === 'ios' ? 'padding' : null}
+                >
+                    <ScrollView style={styles.mainScrollView} contentContainerStyle={styles.mainScrollViewContainer}>
+                        <View style={styles.mainContainer}>
 
-                        {/* 설명 */}
-                        <Image style={styles.logo} source={require("../../img/pickple_logo.png")} />
-                        <Text style={styles.description}>
-                            <Text style={styles.descriptionPickple}>Pickple</Text>에서{"\n"}
-                            사용할 이름을 정해주세요.
+                            {/* 설명 */}
+                            <Image style={styles.logo} source={require("../../img/pickple_logo.png")} />
+                            <Text style={styles.description}>
+                                <Text style={styles.descriptionPickple}>Pickple</Text>에서{"\n"}
+                                사용할 이름을 정해주세요.
 
-                        </Text>
+                            </Text>
 
-                        {/* 입력 */}
-                        <View style={styles.nameInputContainer}>
-                            <TextInput
-                                onFocus={this.onFocus.bind(this, true)}
-                                onBlur={this.onFocus.bind(this, false)}
-                                onChangeText={name => this.setState({ name })}
-                                maxLength={this.nameMaxCount}
-                                value={this.state.name}
-                                placeholder="이름을 입력해주세요"
-                                style={[styles.nameInput, this.state.focus ? styles.focusNameInput : null]} />
-                            <Text style={styles.nameCounter}>{this.state.name.length}/{this.nameMaxCount}</Text>
+                            {/* 입력 */}
+                            <View style={styles.nameInputContainer}>
+                                <TextInput
+                                    onFocus={this.onFocus.bind(this, true)}
+                                    onBlur={this.onFocus.bind(this, false)}
+                                    onChangeText={name => this.setState({ name })}
+                                    maxLength={this.nameMaxCount}
+                                    value={this.state.name}
+                                    placeholder="이름을 입력해주세요"
+                                    style={[styles.nameInput, this.state.focus ? styles.focusNameInput : null]} />
+                                <Text style={styles.nameCounter}>{this.state.name.length}/{this.nameMaxCount}</Text>
+                            </View>
                         </View>
-                    </View>
-                </ScrollView>
+                    </ScrollView>
+                </KeyboardAvoidingView>
 
                 {/* 확인 버튼 */}
                 <TouchableOpacity

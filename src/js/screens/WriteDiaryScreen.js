@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button, Image, ScrollView, TouchableOpacity, StyleSheet, Alert, Platform } from "react-native";
+import { View, Text, Button, Image, ScrollView, TouchableOpacity, StyleSheet, Alert, Platform, KeyboardAvoidingView } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Colors from "../common/Colors";
 import Goal from "../common/Goal";
@@ -56,17 +56,22 @@ class WriteDiaryScreen extends React.Component {
                     <Text style={styles.titleCaption}>오늘의 일기를 작성해주세요.</Text>
                 </View>
 
-                <ScrollView style={styles.userGoalDiaryList} contentContainerStyle={styles.userGoalDiaryListContainer}>
-                    {
-                        this.state.userGoalList.map(userGoal => {
-                            return <UserGoalDiaryElement
-                                key={this.key++}
-                                userGoal={userGoal}
-                                goal={GoalManager.getGoalById(userGoal.getGoalId())}
-                            />;
-                        })
-                    }
-                </ScrollView>
+                <KeyboardAvoidingView
+                    style={{ flex: 1, width: "100%" }}
+                    behavior={Platform.OS === 'ios' ? 'padding' : null}
+                >
+                    <ScrollView style={styles.userGoalDiaryList} contentContainerStyle={styles.userGoalDiaryListContainer}>
+                        {
+                            this.state.userGoalList.map(userGoal => {
+                                return <UserGoalDiaryElement
+                                    key={this.key++}
+                                    userGoal={userGoal}
+                                    goal={GoalManager.getGoalById(userGoal.getGoalId())}
+                                />;
+                            })
+                        }
+                    </ScrollView>
+                </KeyboardAvoidingView>
 
                 <TouchableOpacity style={styles.confirmButton} activeOpacity={Styles.activeOpacity} onPress={this.onPressConfirmButton.bind(this)}>
                     <Text style={styles.confirmButtonText}>저장</Text>
@@ -130,6 +135,7 @@ const styles = StyleSheet.create({
 
     // 사용자 목표 리스트
     userGoalDiaryList: {
+        flex: 1,
         width: "100%"
     },
     userGoalDiaryListContainer: {
